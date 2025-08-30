@@ -1,6 +1,7 @@
 import Link from "next/link";
 
 import { LatestPost } from "@/app/_components/post";
+import DuckDBComponent from "@/app/_components/duckdb-component";
 import { api, HydrateClient } from "@/trpc/server";
 import styles from "./index.module.css";
 
@@ -47,6 +48,8 @@ export default async function Home() {
           </div>
 
           <LatestPost />
+
+          <DuckDBComponent />
         </div>
       </main>
     </HydrateClient>
