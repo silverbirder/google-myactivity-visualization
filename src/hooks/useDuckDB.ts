@@ -33,7 +33,10 @@ export function useDuckDB(): UseDuckDBReturn {
         const logger = new duckdb.ConsoleLogger();
         const dbInstance = new duckdb.AsyncDuckDB(logger, worker);
         await dbInstance.instantiate(bundle.mainModule, bundle.pthreadWorker);
-
+        await dbInstance.open({
+          path: "opfs://test.db",
+          accessMode: duckdb.DuckDBAccessMode.READ_WRITE,
+        });
         setDb(dbInstance);
       } catch (err) {
         const errorMessage = err instanceof Error ? err.message : String(err);
