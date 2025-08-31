@@ -1,13 +1,13 @@
 "use client";
 
-import { useState } from "react";
+import React, { useState, useCallback, memo } from "react";
 import { useDuckDB } from "@/hooks";
 
-export const DuckDB = () => {
+export const DuckDB = memo(() => {
   const { isLoading, error, runQuery } = useDuckDB();
   const [result, setResult] = useState<string>("");
 
-  const handleRunQuery = async () => {
+  const handleRunQuery = useCallback(async () => {
     try {
       const queryResult: Record<string, string | number | boolean | null>[] =
         await runQuery("SELECT 1 as num, 'Hello DuckDB!' as message");
@@ -16,7 +16,7 @@ export const DuckDB = () => {
       const errorMessage = err instanceof Error ? err.message : String(err);
       setResult(`Error: ${errorMessage}`);
     }
-  };
+  }, [runQuery]);
 
   if (isLoading) {
     return <div>Loading DuckDB...</div>;
@@ -33,4 +33,6 @@ export const DuckDB = () => {
       <button onClick={handleRunQuery}>Run Sample Query</button>
     </div>
   );
-};
+});
+
+DuckDB.displayName = "DuckDB";

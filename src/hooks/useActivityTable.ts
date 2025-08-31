@@ -19,23 +19,6 @@ export const useActivityTable = () => {
     )`);
   }, [runQuery, TABLE_NAME]);
 
-  const insertActivities = async (data: Activity[]) => {
-    await createTable();
-    for (const a of data) {
-      await runQuery(
-        `INSERT INTO ${TABLE_NAME} VALUES (
-          '${a.header.replace(/'/g, "''")}',
-          '${a.title.replace(/'/g, "''")}',
-          '${a.titleUrl.replace(/'/g, "''")}',
-          '${a.time.replace(/'/g, "''")}',
-          '${JSON.stringify(a.products).replace(/'/g, "''")}',
-          '${JSON.stringify(a.activityControls).replace(/'/g, "''")}'
-        )`,
-      );
-    }
-    await fetchActivities();
-  };
-
   type DuckDBRow = {
     header: string;
     title: string;
@@ -44,6 +27,7 @@ export const useActivityTable = () => {
     products: string;
     activityControls: string;
   };
+
   const fetchActivities = useCallback(async () => {
     await createTable();
     const rows = await runQuery(`SELECT * FROM ${TABLE_NAME}`);
@@ -59,25 +43,47 @@ export const useActivityTable = () => {
     );
   }, [createTable, runQuery, TABLE_NAME]);
 
-  const handleFileUpload = (file: File) => {
-    const reader = new FileReader();
-    reader.onload = async (e) => {
-      try {
-        const result = e.target?.result;
-        if (typeof result === "string") {
-          const json = JSON.parse(result) as unknown;
-          if (Array.isArray(json) && json.every(isActivity)) {
-            await insertActivities(json);
-          }
-        }
-      } catch {
-        // エラー時は何もしない
+  const insertActivities = useCallback(
+    async (data: Activity[]) => {
+      await createTable();
+      for (const a of data) {
+        await runQuery(
+          `INSERT INTO ${TABLE_NAME} VALUES (
+          '${a.header.replace(/'/g, "''")}',
+          '${a.title.replace(/'/g, "''")}',
+          '${a.titleUrl.replace(/'/g, "''")}',
+          '${a.time.replace(/'/g, "''")}',
+          '${JSON.stringify(a.products).replace(/'/g, "''")}',
+          '${JSON.stringify(a.activityControls).replace(/'/g, "''")}'
+        )`,
+        );
       }
-    };
-    reader.readAsText(file);
-  };
+      await fetchActivities();
+    },
+    [createTable, runQuery, fetchActivities, TABLE_NAME],
+  );
 
-  // Activity型ガード
+  const handleFileUpload = useCallback(
+    (file: File) => {
+      const reader = new FileReader();
+      reader.onload = async (e) => {
+        try {
+          const result = e.target?.result;
+          if (typeof result === "string") {
+            const json = JSON.parse(result) as unknown;
+            if (Array.isArray(json) && json.every(isActivity)) {
+              await insertActivities(json);
+            }
+          }
+        } catch {
+          // エラー時は何もしない
+        }
+      };
+      reader.readAsText(file);
+    },
+    [insertActivities],
+  );
+
   function isActivity(obj: unknown): obj is Activity {
     return (
       typeof obj === "object" &&

@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback } from "react";
 import * as duckdb from "@duckdb/duckdb-wasm";
 
 const MANUAL_BUNDLES: duckdb.DuckDBBundles = {
@@ -46,27 +46,29 @@ export function useDuckDB(): UseDuckDBReturn {
     void initDuckDB();
   }, []);
 
-  const runQuery = async (
-    query: string,
-  ): Promise<Record<string, string | number | boolean | null>[]> => {
-    if (!db) {
-      throw new Error("DuckDB is not initialized");
-    }
-
-    try {
-      const conn = await db.connect();
-      const result = await conn.query(query);
-      const data = result.toArray() as Record<
-        string,
-        string | number | boolean | null
-      >[];
-      await conn.close();
-      return data;
-    } catch (err) {
-      const errorMessage = err instanceof Error ? err.message : String(err);
-      throw new Error(`Query failed: ${errorMessage}`);
-    }
-  };
+  const runQuery = useCallback(
+    async (
+      query: string,
+    ): Promise<Record<string, string | number | boolean | null>[]> => {
+      if (!db) {
+        throw new Error("DuckDB is not initialized");
+      }
+      try {
+        const conn = await db.connect();
+        const result = await conn.query(query);
+        const data = result.toArray() as Record<
+          string,
+          string | number | boolean | null
+        >[];
+        await conn.close();
+        return data;
+      } catch (err) {
+        const errorMessage = err instanceof Error ? err.message : String(err);
+        throw new Error(`Query failed: ${errorMessage}`);
+      }
+    },
+    [db],
+  );
 
   return {
     db,

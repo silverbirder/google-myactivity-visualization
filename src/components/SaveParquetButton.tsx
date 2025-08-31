@@ -1,6 +1,6 @@
-import React from "react";
 import { useExportParquet, useOPFSSave } from "@/hooks";
 import type { AsyncDuckDB } from "@duckdb/duckdb-wasm";
+import React, { useState, useCallback, memo, useMemo } from "react";
 
 interface SaveParquetButtonProps {
   db: AsyncDuckDB | null;
@@ -8,23 +8,19 @@ interface SaveParquetButtonProps {
   fileName?: string;
 }
 
-/**
- * Parquet保存ボタン（汎用）
- * @param db DuckDBインスタンス
- * @param tableName エクスポートするテーブル名
- * @param fileName 保存するファイル名（省略時は `${tableName}.parquet`）
- */
-export const SaveParquetButton: React.FC<SaveParquetButtonProps> = ({
+export const SaveParquetButton = memo(function SaveParquetButton({
   db,
   tableName,
   fileName,
-}) => {
+}: SaveParquetButtonProps) {
   const exportParquet = useExportParquet(db, tableName);
-  const saveOPFS = useOPFSSave(fileName ?? `${tableName}.parquet`);
-  const [loading, setLoading] = React.useState(false);
-  const [error, setError] = React.useState<string | null>(null);
+  const saveOPFS = useOPFSSave(
+    useMemo(() => fileName ?? `${tableName}.parquet`, [fileName, tableName]),
+  );
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
-  const handleClick = async () => {
+  const handleClick = useCallback(async () => {
     setLoading(true);
     setError(null);
     try {
@@ -45,7 +41,7 @@ export const SaveParquetButton: React.FC<SaveParquetButtonProps> = ({
     } finally {
       setLoading(false);
     }
-  };
+  }, [exportParquet, saveOPFS]);
 
   return (
     <div>
@@ -55,4 +51,6 @@ export const SaveParquetButton: React.FC<SaveParquetButtonProps> = ({
       {error && <div style={{ color: "red" }}>{error}</div>}
     </div>
   );
-};
+});
+
+SaveParquetButton.displayName = "SaveParquetButton";

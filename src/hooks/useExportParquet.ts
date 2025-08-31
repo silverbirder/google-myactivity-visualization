@@ -7,12 +7,8 @@ export function useExportParquet(db: AsyncDuckDB | null, tableName: string) {
     const conn = await db.connect();
     const filePath = `/tmp/${tableName}.parquet`;
     await conn.query(`COPY ${tableName} TO '${filePath}' (FORMAT 'parquet')`);
-    if (typeof db.copyFileToBuffer === "function") {
-      const data = await db.copyFileToBuffer(filePath);
-      await conn.close();
-      return data;
-    }
+    const data = await db.copyFileToBuffer(filePath);
     await conn.close();
-    throw new Error("DuckDB OPFS APIが利用できません");
+    return data;
   }, [db, tableName]);
 }
