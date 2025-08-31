@@ -32,6 +32,25 @@ export const DuckDBViewer = memo(function DuckDBViewer({
     }
   };
 
+  const handleTruncate = async () => {
+    const ok = window.confirm(
+      "Are you sure you want to TRUNCATE table `activities`? This will permanently remove all rows.",
+    );
+    if (!ok) return;
+    setRunning(true);
+    setMessage("");
+    try {
+      await runQuery("TRUNCATE TABLE activities");
+      setRows(null);
+      setMessage("Table 'activities' truncated successfully.");
+    } catch (err) {
+      const errMsg = err instanceof Error ? err.message : String(err);
+      setMessage(`Error truncating table: ${errMsg}`);
+    } finally {
+      setRunning(false);
+    }
+  };
+
   const headers = useMemo(() => {
     if (!rows || rows.length === 0) return [] as string[];
     const first = rows[0] as Record<string, unknown> | undefined;
@@ -57,6 +76,9 @@ export const DuckDBViewer = memo(function DuckDBViewer({
       <div style={{ marginTop: 8 }}>
         <button onClick={handleRun} disabled={isLoading || running}>
           Run Query
+        </button>
+        <button onClick={handleTruncate} disabled={isLoading || running}>
+          Truncate activities
         </button>
       </div>
 
