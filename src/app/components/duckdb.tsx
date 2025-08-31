@@ -3,15 +3,14 @@
 import { useState } from "react";
 import { useDuckDB } from "@/hooks/useDuckDB";
 
-export default function DuckDBComponent() {
+export const DuckDB = () => {
   const { isLoading, error, runQuery } = useDuckDB();
   const [result, setResult] = useState<string>("");
 
   const handleRunQuery = async () => {
     try {
-      const queryResult: Record<string, string | number | boolean | null>[] = await runQuery(
-        "SELECT 1 as num, 'Hello DuckDB!' as message",
-      );
+      const queryResult: Record<string, string | number | boolean | null>[] =
+        await runQuery("SELECT 1 as num, 'Hello DuckDB!' as message");
       setResult(JSON.stringify(queryResult, null, 2));
     } catch (err) {
       const errorMessage = err instanceof Error ? err.message : String(err);
@@ -34,4 +33,4 @@ export default function DuckDBComponent() {
       <button onClick={handleRunQuery}>Run Sample Query</button>
     </div>
   );
-}
+};
