@@ -1,16 +1,20 @@
 "use client";
 import React from "react";
-import { ActivityUploader } from "../components/ActivityUploader";
-import { ActivityTable } from "../components/ActivityTable";
-import { useActivityTable } from "../hooks/useActivityTable";
+import {
+  ActivityUploader,
+  ActivityTable,
+  SaveParquetButton,
+} from "@/components";
+import { useActivityTable } from "@/hooks";
 
 export default function Page() {
-  const { activities, handleFileUpload } = useActivityTable();
+  const { activities, handleFileUpload, db } = useActivityTable();
   return (
     <div>
       <h1>Google My Activity Visualization</h1>
       <ActivityUploader onUpload={handleFileUpload} />
       <ActivityTable activities={activities} />
+      <SaveParquetButton db={db} tableName="activities" />
     </div>
   );
 }

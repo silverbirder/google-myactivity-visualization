@@ -1,5 +1,5 @@
-import { useEffect, useState } from "react";
-import type { Activity } from "../types/activity";
+import { useEffect, useState, useCallback } from "react";
+import type { Activity } from "@/types";
 import { useDuckDB } from "./useDuckDB";
 
 export const useActivityTable = () => {
@@ -8,7 +8,7 @@ export const useActivityTable = () => {
   const { db, isLoading, error, runQuery } = useDuckDB();
   const TABLE_NAME = "activities";
 
-  const createTable = async () => {
+  const createTable = useCallback(async () => {
     await runQuery(`CREATE TABLE IF NOT EXISTS ${TABLE_NAME} (
       header VARCHAR,
       title VARCHAR,
@@ -17,7 +17,7 @@ export const useActivityTable = () => {
       products VARCHAR,
       activityControls VARCHAR
     )`);
-  };
+  }, [runQuery, TABLE_NAME]);
 
   const insertActivities = async (data: Activity[]) => {
     await createTable();
@@ -44,7 +44,7 @@ export const useActivityTable = () => {
     products: string;
     activityControls: string;
   };
-  const fetchActivities = async () => {
+  const fetchActivities = useCallback(async () => {
     await createTable();
     const rows = await runQuery(`SELECT * FROM ${TABLE_NAME}`);
     setActivities(
@@ -57,7 +57,7 @@ export const useActivityTable = () => {
         activityControls: JSON.parse(row.activityControls) as string[],
       })),
     );
-  };
+  }, [createTable, runQuery, TABLE_NAME]);
 
   const handleFileUpload = (file: File) => {
     const reader = new FileReader();
@@ -95,8 +95,7 @@ export const useActivityTable = () => {
     if (!isLoading && db) {
       void fetchActivities();
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [isLoading, db]);
+  }, [isLoading, db, fetchActivities]);
 
-  return { activities, handleFileUpload, isLoading, error };
+  return { activities, handleFileUpload, isLoading, error, db };
 };

@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { useDuckDB } from "@/hooks/useDuckDB";
+import { useDuckDB } from "@/hooks";
 
 export const DuckDB = () => {
   const { isLoading, error, runQuery } = useDuckDB();
