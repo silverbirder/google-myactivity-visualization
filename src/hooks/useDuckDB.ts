@@ -3,8 +3,8 @@ import * as duckdb from "@duckdb/duckdb-wasm";
 
 const MANUAL_BUNDLES: duckdb.DuckDBBundles = {
   mvp: {
-    mainModule: "/duckdb-mvp.wasm",
-    mainWorker: "/duckdb-browser-mvp.worker.js",
+    mainModule: "/duckdb-eh.wasm",
+    mainWorker: "/duckdb-browser-eh.worker.js",
   },
 };
 
