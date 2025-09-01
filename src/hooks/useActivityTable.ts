@@ -1,10 +1,8 @@
-import { useEffect, useState, useCallback } from "react";
+import { useCallback } from "react";
 import type { Activity } from "@/types";
 import { useDuckDB } from "./useDuckDB";
 
 export const useActivityTable = () => {
-  const [activities, setActivities] = useState<Activity[]>([]);
-
   const { db, isLoading, error, runQuery } = useDuckDB();
   const TABLE_NAME = "activities";
 
@@ -18,30 +16,6 @@ export const useActivityTable = () => {
       activityControls VARCHAR
     )`);
   }, [runQuery, TABLE_NAME]);
-
-  type DuckDBRow = {
-    header: string;
-    title: string;
-    titleUrl: string;
-    time: string;
-    products: string;
-    activityControls: string;
-  };
-
-  const fetchActivities = useCallback(async () => {
-    await createTable();
-    const rows = await runQuery(`SELECT * FROM ${TABLE_NAME}`);
-    setActivities(
-      (rows as DuckDBRow[]).map((row) => ({
-        header: row.header,
-        title: row.title,
-        titleUrl: row.titleUrl,
-        time: row.time,
-        products: JSON.parse(row.products) as string[],
-        activityControls: JSON.parse(row.activityControls) as string[],
-      })),
-    );
-  }, [createTable, runQuery, TABLE_NAME]);
 
   const insertActivities = useCallback(
     async (data: Activity[]) => {
@@ -58,9 +32,8 @@ export const useActivityTable = () => {
         )`,
         );
       }
-      await fetchActivities();
     },
-    [createTable, runQuery, fetchActivities, TABLE_NAME],
+    [createTable, runQuery, TABLE_NAME],
   );
 
   const handleFileUpload = useCallback(
@@ -71,7 +44,7 @@ export const useActivityTable = () => {
           const result = e.target?.result;
           if (typeof result === "string") {
             const json = JSON.parse(result) as unknown;
-            if (Array.isArray(json) && json.every(isActivity)) {
+            if (Array.isArray(json)) {
               await insertActivities(json);
             }
           }
@@ -84,24 +57,5 @@ export const useActivityTable = () => {
     [insertActivities],
   );
 
-  function isActivity(obj: unknown): obj is Activity {
-    return (
-      typeof obj === "object" &&
-      obj !== null &&
-      typeof (obj as Activity).header === "string" &&
-      typeof (obj as Activity).title === "string" &&
-      typeof (obj as Activity).titleUrl === "string" &&
-      typeof (obj as Activity).time === "string" &&
-      Array.isArray((obj as Activity).products) &&
-      Array.isArray((obj as Activity).activityControls)
-    );
-  }
-
-  useEffect(() => {
-    if (!isLoading && db) {
-      void fetchActivities();
-    }
-  }, [isLoading, db, fetchActivities]);
-
-  return { activities, handleFileUpload, isLoading, error, db };
+  return { handleFileUpload, isLoading, error, db };
 };

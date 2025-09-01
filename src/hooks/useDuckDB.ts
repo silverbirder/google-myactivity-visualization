@@ -34,7 +34,7 @@ export function useDuckDB(): UseDuckDBReturn {
         const dbInstance = new duckdb.AsyncDuckDB(logger, worker);
         await dbInstance.instantiate(bundle.mainModule, bundle.pthreadWorker);
         await dbInstance.open({
-          path: "opfs://test.db",
+          path: "opfs://google-myactivity-visualization.db",
           accessMode: duckdb.DuckDBAccessMode.READ_WRITE,
         });
         setDb(dbInstance);
