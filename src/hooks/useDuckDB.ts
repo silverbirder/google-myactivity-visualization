@@ -1,4 +1,4 @@
-import { useEffect, useState, useCallback } from "react";
+import { useEffect, useState, useCallback, useRef } from "react";
 import * as duckdb from "@duckdb/duckdb-wasm";
 
 const MANUAL_BUNDLES: duckdb.DuckDBBundles = {
@@ -9,7 +9,6 @@ const MANUAL_BUNDLES: duckdb.DuckDBBundles = {
 };
 
 export interface UseDuckDBReturn {
-  db: duckdb.AsyncDuckDB | null;
   isLoading: boolean;
   error: string | null;
   runQuery: (
@@ -18,16 +17,16 @@ export interface UseDuckDBReturn {
 }
 
 export function useDuckDB(): UseDuckDBReturn {
-  const [db, setDb] = useState<duckdb.AsyncDuckDB | null>(null);
+  const dbRef = useRef<duckdb.AsyncDuckDB | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
     const initDuckDB = async () => {
+      if (dbRef.current) return;
       try {
         setIsLoading(true);
         setError(null);
-
         const bundle = await duckdb.selectBundle(MANUAL_BUNDLES);
         const worker = new Worker(bundle.mainWorker!);
         const logger = new duckdb.ConsoleLogger();
@@ -37,7 +36,7 @@ export function useDuckDB(): UseDuckDBReturn {
           path: "opfs://google-myactivity-visualization.db",
           accessMode: duckdb.DuckDBAccessMode.READ_WRITE,
         });
-        setDb(dbInstance);
+        dbRef.current = dbInstance;
       } catch (err) {
         const errorMessage = err instanceof Error ? err.message : String(err);
         setError(`Failed to initialize DuckDB: ${errorMessage}`);
@@ -53,11 +52,11 @@ export function useDuckDB(): UseDuckDBReturn {
     async (
       query: string,
     ): Promise<Record<string, string | number | boolean | null>[]> => {
-      if (!db) {
+      if (!dbRef.current) {
         throw new Error("DuckDB is not initialized");
       }
       try {
-        const conn = await db.connect();
+        const conn = await dbRef.current.connect();
         const result = await conn.query(query);
         const data = result.toArray() as Record<
           string,
@@ -70,11 +69,10 @@ export function useDuckDB(): UseDuckDBReturn {
         throw new Error(`Query failed: ${errorMessage}`);
       }
     },
-    [db],
+    [],
   );
 
   return {
-    db,
     isLoading,
     error,
     runQuery,

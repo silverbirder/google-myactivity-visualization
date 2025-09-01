@@ -4,6 +4,7 @@ import { type Metadata } from "next";
 import { Geist } from "next/font/google";
 
 import { TRPCReactProvider } from "@/trpc/react";
+import { DuckDBProvider } from "@/contexts/DuckDBContext";
 
 export const metadata: Metadata = {
   title: "Create T3 App",
@@ -21,7 +22,9 @@ export default function RootLayout({
   return (
     <html lang="ja">
       <body className={geist.className}>
-        <TRPCReactProvider>{children}</TRPCReactProvider>
+        <TRPCReactProvider>
+          <DuckDBProvider>{children}</DuckDBProvider>
+        </TRPCReactProvider>
       </body>
     </html>
   );

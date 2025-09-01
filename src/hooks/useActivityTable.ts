@@ -1,9 +1,9 @@
 import { useCallback } from "react";
 import type { Activity } from "@/types";
-import { useDuckDB } from "./useDuckDB";
+import { useDuckDBContext } from "@/contexts/DuckDBContext";
 
 export const useActivityTable = () => {
-  const { db, isLoading, error, runQuery } = useDuckDB();
+  const { isLoading, error, runQuery } = useDuckDBContext();
   const TABLE_NAME = "activities";
 
   const createTable = useCallback(async () => {
@@ -45,7 +45,7 @@ export const useActivityTable = () => {
           if (typeof result === "string") {
             const json = JSON.parse(result) as unknown;
             if (Array.isArray(json)) {
-              await insertActivities(json);
+              await insertActivities(json as Activity[]);
             }
           }
         } catch {
@@ -57,5 +57,5 @@ export const useActivityTable = () => {
     [insertActivities],
   );
 
-  return { handleFileUpload, isLoading, error, db };
+  return { handleFileUpload, isLoading, error };
 };

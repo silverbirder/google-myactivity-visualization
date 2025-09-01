@@ -1,10 +1,10 @@
 "use client";
 
 import React, { useState, useCallback, memo } from "react";
-import { useDuckDB } from "@/hooks";
+import { useDuckDBContext } from "@/contexts/DuckDBContext";
 
 export const DuckDB = memo(() => {
-  const { isLoading, error, runQuery } = useDuckDB();
+  const { isLoading, error, runQuery } = useDuckDBContext();
   const [result, setResult] = useState<string>("");
 
   const handleRunQuery = useCallback(async () => {

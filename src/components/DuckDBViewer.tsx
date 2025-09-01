@@ -1,7 +1,7 @@
 "use client";
 
 import React, { memo, useMemo, useState } from "react";
-import { useDuckDB } from "@/hooks";
+import { useDuckDBContext } from "@/contexts/DuckDBContext";
 
 type Row = Record<string, string | number | boolean | null>;
 
@@ -10,7 +10,7 @@ export const DuckDBViewer = memo(function DuckDBViewer({
 }: {
   defaultQuery?: string;
 }) {
-  const { isLoading, error, runQuery } = useDuckDB();
+  const { isLoading, error, runQuery } = useDuckDBContext();
   const [query, setQuery] = useState<string>(defaultQuery ?? "");
   const [rows, setRows] = useState<Row[] | null>(null);
   const [running, setRunning] = useState(false);
