@@ -20,17 +20,39 @@ export const useActivityTable = () => {
   const insertActivities = useCallback(
     async (data: Activity[]) => {
       await createTable();
-      for (const a of data) {
-        await runQuery(
-          `INSERT INTO ${TABLE_NAME} VALUES (
-          '${a.header.replace(/'/g, "''")}',
-          '${a.title.replace(/'/g, "''")}',
-          '${a.titleUrl.replace(/'/g, "''")}',
-          '${a.time.replace(/'/g, "''")}',
-          '${JSON.stringify(a.products).replace(/'/g, "''")}',
-          '${JSON.stringify(a.activityControls).replace(/'/g, "''")}'
-        )`,
+      const esc = (v: string) => (v ?? "").replace(/'/g, "''");
+      const BATCH_SIZE = 1000;
+      const statements: string[] = [];
+      statements.push("BEGIN TRANSACTION;");
+      for (let i = 0; i < data.length; i += BATCH_SIZE) {
+        const chunk = data.slice(i, i + BATCH_SIZE);
+        const values = chunk
+          .map((a: Activity) => {
+            const header = esc(a.header ?? "");
+            const title = esc(a.title ?? "");
+            const titleUrl = esc(a.titleUrl ?? "");
+            const time = esc(a.time ?? "");
+            const products = esc(JSON.stringify(a.products ?? []));
+            const activityControls = esc(
+              JSON.stringify(a.activityControls ?? []),
+            );
+            return `('${header}','${title}','${titleUrl}','${time}','${products}','${activityControls}')`;
+          })
+          .join(",\n");
+        if (values.length === 0) continue;
+        statements.push(
+          `INSERT INTO ${TABLE_NAME} (header, title, titleUrl, time, products, activityControls)\nVALUES ${values};`,
         );
+      }
+      statements.push("COMMIT;");
+      const sql = statements.join("\n");
+      try {
+        await runQuery(sql);
+      } catch (e) {
+        try {
+          await runQuery("ROLLBACK;");
+        } catch {}
+        throw e;
       }
     },
     [createTable, runQuery, TABLE_NAME],
