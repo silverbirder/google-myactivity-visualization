@@ -9,7 +9,7 @@ export default function Page() {
     <div>
       <h1>Google My Activity Visualization</h1>
       <ActivityUploader onUpload={handleFileUpload} />
-      <DuckDBViewer defaultQuery={"SELECT * FROM activities LIMIT 10"} />
+      <DuckDBViewer defaultQuery={"SELECT * FROM activities LIMIT 10;"} />
     </div>
   );
 }

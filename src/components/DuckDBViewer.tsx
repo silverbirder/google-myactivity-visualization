@@ -40,7 +40,7 @@ export const DuckDBViewer = memo(function DuckDBViewer({
     setRunning(true);
     setMessage("");
     try {
-      await runQuery("TRUNCATE TABLE activities");
+      await runQuery("TRUNCATE activities;");
       setRows(null);
       setMessage("Table 'activities' truncated successfully.");
     } catch (err) {
