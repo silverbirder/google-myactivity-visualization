@@ -21,11 +21,10 @@ export const useActivityTable = () => {
     async (data: Activity[]) => {
       await createTable();
       const esc = (v: string) => (v ?? "").replace(/'/g, "''");
-      const BATCH_SIZE = 1000;
-      const statements: string[] = [];
-      statements.push("BEGIN TRANSACTION;");
+      const BATCH_SIZE = 250;
       for (let i = 0; i < data.length; i += BATCH_SIZE) {
         const chunk = data.slice(i, i + BATCH_SIZE);
+        if (chunk.length === 0) continue;
         const values = chunk
           .map((a: Activity) => {
             const header = esc(a.header ?? "");
@@ -39,20 +38,8 @@ export const useActivityTable = () => {
             return `('${header}','${title}','${titleUrl}','${time}','${products}','${activityControls}')`;
           })
           .join(",\n");
-        if (values.length === 0) continue;
-        statements.push(
-          `INSERT INTO ${TABLE_NAME} (header, title, titleUrl, time, products, activityControls)\nVALUES ${values};`,
-        );
-      }
-      statements.push("COMMIT;");
-      const sql = statements.join("\n");
-      try {
+        const sql = `INSERT INTO ${TABLE_NAME} (header, title, titleUrl, time, products, activityControls)\nVALUES ${values};`;
         await runQuery(sql);
-      } catch (e) {
-        try {
-          await runQuery("ROLLBACK;");
-        } catch {}
-        throw e;
       }
     },
     [createTable, runQuery, TABLE_NAME],
