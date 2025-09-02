@@ -1,4 +1,5 @@
 import { useCallback } from "react";
+import JSZip from "jszip";
 import type { Activity } from "@/types";
 import { useDuckDBContext } from "@/contexts/DuckDBContext";
 
@@ -21,7 +22,7 @@ export const useActivityTable = () => {
     async (data: Activity[]) => {
       await createTable();
       const esc = (v: string) => (v ?? "").replace(/'/g, "''");
-      const BATCH_SIZE = 250;
+      const BATCH_SIZE = 500;
       for (let i = 0; i < data.length; i += BATCH_SIZE) {
         const chunk = data.slice(i, i + BATCH_SIZE);
         if (chunk.length === 0) continue;
@@ -46,22 +47,36 @@ export const useActivityTable = () => {
   );
 
   const handleFileUpload = useCallback(
-    (file: File) => {
-      const reader = new FileReader();
-      reader.onload = async (e) => {
+    async (file: File) => {
+      const isZip =
+        file.type === "application/zip" ||
+        file.type === "application/x-zip-compressed" ||
+        /\.zip$/i.test(file.name);
+      if (!isZip) {
+        const text = await file.text();
         try {
-          const result = e.target?.result;
-          if (typeof result === "string") {
-            const json = JSON.parse(result) as unknown;
-            if (Array.isArray(json)) {
-              await insertActivities(json as Activity[]);
-            }
+          const json = JSON.parse(text) as unknown;
+          if (Array.isArray(json)) {
+            await insertActivities(json as Activity[]);
           }
-        } catch {
-          // エラー時は何もしない
+        } catch {}
+        return;
+      }
+      try {
+        const zip = await JSZip.loadAsync(file);
+        const allFiles = Object.values(zip.files);
+        const jsonFiles = allFiles.filter((f) => /\.json$/i.test(f.name));
+        if (jsonFiles.length === 0) return;
+        for (const f of jsonFiles) {
+          const content = await f.async("string");
+          try {
+            const parsed = JSON.parse(content) as unknown;
+            if (Array.isArray(parsed)) {
+              await insertActivities(parsed as Activity[]);
+            }
+          } catch {}
         }
-      };
-      reader.readAsText(file);
+      } catch {}
     },
     [insertActivities],
   );

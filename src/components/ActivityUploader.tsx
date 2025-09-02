@@ -14,7 +14,11 @@ export const ActivityUploader = memo(function ActivityUploader({
   );
 
   return (
-    <input type="file" accept="application/json" onChange={handleChange} />
+    <input
+      type="file"
+      accept="application/json,.json,application/zip,application/x-zip-compressed,.zip"
+      onChange={handleChange}
+    />
   );
 });
 
