@@ -4,14 +4,27 @@ import type { Activity } from "@/types";
 import { useDuckDBContext } from "@/contexts/DuckDBContext";
 
 export const useActivityTable = () => {
-  const { isLoading, error, runQuery, registerFileText } =
-    useDuckDBContext();
+  const { isLoading, error, runQuery, registerFileText } = useDuckDBContext();
   const TABLE_NAME = "activities";
 
   const createTable = useCallback(
     async (path: string) => {
       await runQuery(
-        `CREATE TABLE IF NOT EXISTS ${TABLE_NAME} AS SELECT header, title, titleUrl, time, products, activityControls FROM read_json('${path}')`,
+        `CREATE TABLE IF NOT EXISTS ${TABLE_NAME} AS
+         SELECT
+           json_extract_string(json, '$.header')                AS header,
+           json_extract_string(json, '$.title')                 AS title,
+           json_extract_string(json, '$.titleUrl')              AS titleUrl,
+           json_extract_string(json, '$.time')                  AS time,
+           json_extract(json, '$.products')                     AS products,
+           json_extract(json, '$.activityControls')             AS activityControls,
+           json_extract_string(json, '$.description')           AS description,
+           json_extract(json, '$.safeHtmlItem')                 AS safeHtmlItem,
+           json_extract(json, '$.audioFiles')                   AS audioFiles,
+           json_extract(json, '$.details')                      AS details,
+           json_extract(json, '$.locationInfos')                AS locationInfos,
+           json_extract(json, '$.subtitles')                    AS subtitles
+         FROM read_json_objects('${path}')`,
       );
     },
     [runQuery, TABLE_NAME],
@@ -24,7 +37,21 @@ export const useActivityTable = () => {
       await registerFileText(path, jsonText);
       await createTable(path);
       await runQuery(
-        `INSERT INTO ${TABLE_NAME} SELECT header, title, titleUrl, time, products, activityControls FROM read_json('${path}')`,
+        `INSERT INTO ${TABLE_NAME}
+         SELECT
+           json_extract_string(json, '$.header')                AS header,
+           json_extract_string(json, '$.title')                 AS title,
+           json_extract_string(json, '$.titleUrl')              AS titleUrl,
+           json_extract_string(json, '$.time')                  AS time,
+           json_extract(json, '$.products')                     AS products,
+           json_extract(json, '$.activityControls')             AS activityControls,
+           json_extract_string(json, '$.description')           AS description,
+           json_extract(json, '$.safeHtmlItem')                 AS safeHtmlItem,
+           json_extract(json, '$.audioFiles')                   AS audioFiles,
+           json_extract(json, '$.details')                      AS details,
+           json_extract(json, '$.locationInfos')                AS locationInfos,
+           json_extract(json, '$.subtitles')                    AS subtitles
+         FROM read_json_objects('${path}')`,
       );
     },
     [createTable, registerFileText, TABLE_NAME, runQuery],
