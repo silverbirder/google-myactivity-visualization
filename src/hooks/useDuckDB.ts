@@ -14,6 +14,7 @@ export interface UseDuckDBReturn {
   runQuery: (
     query: string,
   ) => Promise<Record<string, string | number | boolean | null>[]>;
+  registerFileText: (path: string, content: string) => Promise<void>;
 }
 
 export function useDuckDB(): UseDuckDBReturn {
@@ -72,9 +73,18 @@ export function useDuckDB(): UseDuckDBReturn {
     [],
   );
 
+  const registerFileText = useCallback(
+    async (path: string, content: string) => {
+      if (!dbRef.current) throw new Error("DuckDB is not initialized");
+      await dbRef.current.registerFileText(path, content);
+    },
+    [],
+  );
+
   return {
     isLoading,
     error,
     runQuery,
+    registerFileText,
   } as const;
 }

@@ -4,46 +4,30 @@ import type { Activity } from "@/types";
 import { useDuckDBContext } from "@/contexts/DuckDBContext";
 
 export const useActivityTable = () => {
-  const { isLoading, error, runQuery } = useDuckDBContext();
+  const { isLoading, error, runQuery, registerFileText } =
+    useDuckDBContext();
   const TABLE_NAME = "activities";
 
-  const createTable = useCallback(async () => {
-    await runQuery(`CREATE TABLE IF NOT EXISTS ${TABLE_NAME} (
-      header VARCHAR,
-      title VARCHAR,
-      titleUrl VARCHAR,
-      time VARCHAR,
-      products VARCHAR,
-      activityControls VARCHAR
-    )`);
-  }, [runQuery, TABLE_NAME]);
+  const createTable = useCallback(
+    async (path: string) => {
+      await runQuery(
+        `CREATE TABLE IF NOT EXISTS ${TABLE_NAME} AS SELECT header, title, titleUrl, time, products, activityControls FROM read_json('${path}')`,
+      );
+    },
+    [runQuery, TABLE_NAME],
+  );
 
   const insertActivities = useCallback(
     async (data: Activity[]) => {
-      await createTable();
-      const esc = (v: string) => (v ?? "").replace(/'/g, "''");
-      const BATCH_SIZE = 500;
-      for (let i = 0; i < data.length; i += BATCH_SIZE) {
-        const chunk = data.slice(i, i + BATCH_SIZE);
-        if (chunk.length === 0) continue;
-        const values = chunk
-          .map((a: Activity) => {
-            const header = esc(a.header ?? "");
-            const title = esc(a.title ?? "");
-            const titleUrl = esc(a.titleUrl ?? "");
-            const time = esc(a.time ?? "");
-            const products = esc(JSON.stringify(a.products ?? []));
-            const activityControls = esc(
-              JSON.stringify(a.activityControls ?? []),
-            );
-            return `('${header}','${title}','${titleUrl}','${time}','${products}','${activityControls}')`;
-          })
-          .join(",\n");
-        const sql = `INSERT INTO ${TABLE_NAME} (header, title, titleUrl, time, products, activityControls)\nVALUES ${values};`;
-        await runQuery(sql);
-      }
+      const path = `mem://activities_${Date.now()}.json`;
+      const jsonText = JSON.stringify(data);
+      await registerFileText(path, jsonText);
+      await createTable(path);
+      await runQuery(
+        `INSERT INTO ${TABLE_NAME} SELECT header, title, titleUrl, time, products, activityControls FROM read_json('${path}')`,
+      );
     },
-    [createTable, runQuery, TABLE_NAME],
+    [createTable, registerFileText, TABLE_NAME, runQuery],
   );
 
   const handleFileUpload = useCallback(
