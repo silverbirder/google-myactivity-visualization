@@ -1,4 +1,6 @@
 import { useCallback } from "react";
+import { buildCreateActivitiesSql } from "@/sql/create_activities";
+import { buildInsertActivitiesSql } from "@/sql/insert_activities";
 import JSZip from "jszip";
 import type { Activity } from "@/types";
 import { useDuckDBContext } from "@/contexts/DuckDBContext";
@@ -9,23 +11,8 @@ export const useActivityTable = () => {
 
   const createTable = useCallback(
     async (path: string) => {
-      await runQuery(
-        `CREATE TABLE IF NOT EXISTS ${TABLE_NAME} AS
-         SELECT
-           json_extract_string(json, '$.header')                AS header,
-           json_extract_string(json, '$.title')                 AS title,
-           json_extract_string(json, '$.titleUrl')              AS titleUrl,
-           json_extract_string(json, '$.time')                  AS time,
-           json_extract(json, '$.products')                     AS products,
-           json_extract(json, '$.activityControls')             AS activityControls,
-           json_extract_string(json, '$.description')           AS description,
-           json_extract(json, '$.safeHtmlItem')                 AS safeHtmlItem,
-           json_extract(json, '$.audioFiles')                   AS audioFiles,
-           json_extract(json, '$.details')                      AS details,
-           json_extract(json, '$.locationInfos')                AS locationInfos,
-           json_extract(json, '$.subtitles')                    AS subtitles
-         FROM read_json_objects('${path}')`,
-      );
+      const sql = buildCreateActivitiesSql(TABLE_NAME, path);
+      await runQuery(sql);
     },
     [runQuery, TABLE_NAME],
   );
@@ -36,23 +23,10 @@ export const useActivityTable = () => {
       const jsonText = JSON.stringify(data);
       await registerFileText(path, jsonText);
       await createTable(path);
-      await runQuery(
-        `INSERT INTO ${TABLE_NAME}
-         SELECT
-           json_extract_string(json, '$.header')                AS header,
-           json_extract_string(json, '$.title')                 AS title,
-           json_extract_string(json, '$.titleUrl')              AS titleUrl,
-           json_extract_string(json, '$.time')                  AS time,
-           json_extract(json, '$.products')                     AS products,
-           json_extract(json, '$.activityControls')             AS activityControls,
-           json_extract_string(json, '$.description')           AS description,
-           json_extract(json, '$.safeHtmlItem')                 AS safeHtmlItem,
-           json_extract(json, '$.audioFiles')                   AS audioFiles,
-           json_extract(json, '$.details')                      AS details,
-           json_extract(json, '$.locationInfos')                AS locationInfos,
-           json_extract(json, '$.subtitles')                    AS subtitles
-         FROM read_json_objects('${path}')`,
-      );
+      {
+        const sql = buildInsertActivitiesSql(TABLE_NAME, path);
+        await runQuery(sql);
+      }
     },
     [createTable, registerFileText, TABLE_NAME, runQuery],
   );
