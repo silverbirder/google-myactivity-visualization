@@ -7,6 +7,7 @@ import { Geist } from "next/font/google";
 import { TRPCReactProvider } from "@/trpc/react";
 import { DuckDBProvider } from "@/contexts/DuckDBContext";
 import { Provider as ChakraProvider } from "@/components/ui/provider";
+import { Toaster } from "@/components/ui/toaster";
 
 const baseUrl =
   process.env.BASE_URL ?? "https://google-myactivity-visualization.vercel.app";
@@ -33,7 +34,10 @@ export default function RootLayout({
       <body className={geist.className}>
         <TRPCReactProvider>
           <DuckDBProvider>
-            <ChakraProvider>{children}</ChakraProvider>
+            <ChakraProvider>
+              <Toaster />
+              {children}
+            </ChakraProvider>
           </DuckDBProvider>
         </TRPCReactProvider>
         {process.env.GA_ID && <GoogleAnalytics gaId={process.env.GA_ID} />}
