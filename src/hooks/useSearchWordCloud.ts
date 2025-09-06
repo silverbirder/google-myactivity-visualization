@@ -14,7 +14,7 @@ export function useSearchWordCloud() {
     setLoading(true);
     setError(null);
     try {
-      const sql = buildSelectSearchWordsSql("activities", 100);
+  const sql = buildSelectSearchWordsSql(100);
       const res = await runQuery(sql);
       const freq: Record<string, number> = {};
       for (const row of res) {

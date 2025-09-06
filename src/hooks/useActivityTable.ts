@@ -7,14 +7,13 @@ import { useDuckDBContext } from "@/contexts/DuckDBContext";
 
 export const useActivityTable = () => {
   const { isLoading, error, runQuery, registerFileText } = useDuckDBContext();
-  const TABLE_NAME = "activities";
 
   const createTable = useCallback(
     async (path: string) => {
-      const sql = buildCreateActivitiesSql(TABLE_NAME, path);
+      const sql = buildCreateActivitiesSql(path);
       await runQuery(sql);
     },
-    [runQuery, TABLE_NAME],
+    [runQuery],
   );
 
   const insertActivities = useCallback(
@@ -24,11 +23,11 @@ export const useActivityTable = () => {
       await registerFileText(path, jsonText);
       await createTable(path);
       {
-        const sql = buildInsertActivitiesSql(TABLE_NAME, path);
+        const sql = buildInsertActivitiesSql(path);
         await runQuery(sql);
       }
     },
-    [createTable, registerFileText, TABLE_NAME, runQuery],
+    [createTable, registerFileText, runQuery],
   );
 
   const handleFileUpload = useCallback(

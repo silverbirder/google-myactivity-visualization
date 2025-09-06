@@ -1,6 +1,6 @@
-export function buildCreateActivitiesSql(tableName: string, path: string) {
+export function buildCreateActivitiesSql(path: string) {
   const safePath = path.replaceAll("'", "''");
-  return `CREATE TABLE IF NOT EXISTS ${tableName} AS
+  return `CREATE TABLE IF NOT EXISTS activities AS
 SELECT
   json_extract_string(json, '$.header')                AS header,
   json_extract_string(json, '$.title')                 AS title,

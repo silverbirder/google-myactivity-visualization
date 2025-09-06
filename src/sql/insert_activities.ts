@@ -1,6 +1,6 @@
-export function buildInsertActivitiesSql(tableName: string, path: string) {
+export function buildInsertActivitiesSql(path: string) {
   const safePath = path.replaceAll("'", "''");
-  return `INSERT INTO ${tableName}
+  return `INSERT INTO activities
 SELECT
   json_extract_string(json, '$.header')                AS header,
   json_extract_string(json, '$.title')                 AS title,
