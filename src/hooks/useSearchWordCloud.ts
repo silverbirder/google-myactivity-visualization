@@ -1,6 +1,7 @@
 import { useCallback, useState } from "react";
 import { useDuckDBContext } from "@/contexts/DuckDBContext";
 import type { WordCloudData } from "@/components/WordCloud";
+import { buildSelectSearchWordsSql } from "@/sql/select_search_words";
 
 export function useSearchWordCloud() {
   const { isLoading, runQuery } = useDuckDBContext();
@@ -13,20 +14,12 @@ export function useSearchWordCloud() {
     setLoading(true);
     setError(null);
     try {
-      const res = await runQuery(`
-        SELECT 
-          url_decode(regexp_extract(titleUrl, '[?&]q=([^&]+)', 1)) AS searched_word
-        FROM activities
-        WHERE header = '検索'
-          AND titleUrl LIKE 'https://www.google.com/search?%'
-        LIMIT 100;
-      `);
-      // 集計してワードごとの出現回数をカウント
+      const sql = buildSelectSearchWordsSql("activities", 100);
+      const res = await runQuery(sql);
       const freq: Record<string, number> = {};
       for (const row of res) {
         const raw = String(row.searched_word ?? "").trim();
         if (!raw) continue;
-        // +で分割し、空白や空文字を除外
         const words = raw
           .split("+")
           .map((w) => w.trim())
