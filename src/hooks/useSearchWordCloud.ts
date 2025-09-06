@@ -1,7 +1,7 @@
 import { useCallback, useState } from "react";
 import { useDuckDBContext } from "@/contexts/DuckDBContext";
 import type { WordCloudData } from "@/components/WordCloud";
-import { buildSelectSearchWordsSql } from "@/sql/select_search_words";
+import selectSearchWordsSql from "@/sql/select_search_words.sql";
 
 export function useSearchWordCloud() {
   const { isLoading, runQuery } = useDuckDBContext();
@@ -14,7 +14,7 @@ export function useSearchWordCloud() {
     setLoading(true);
     setError(null);
     try {
-  const sql = buildSelectSearchWordsSql(100);
+      const sql = selectSearchWordsSql.replace("__LIMIT__", String(100));
       const res = await runQuery(sql);
       const freq: Record<string, number> = {};
       for (const row of res) {

@@ -9,6 +9,13 @@ const config = {
   experimental: {
     optimizePackageImports: ["@chakra-ui/react"],
   },
+  webpack: (config) => {
+    config.module.rules.push({
+      test: /\.sql$/i,
+      type: "asset/source",
+    });
+    return config;
+  },
 };
 
 export default config;

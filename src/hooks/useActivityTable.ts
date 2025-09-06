@@ -1,6 +1,6 @@
 import { useCallback } from "react";
-import { buildCreateActivitiesSql } from "@/sql/create_activities";
-import { buildInsertActivitiesSql } from "@/sql/insert_activities";
+import createActivitiesSql from "@/sql/create_activities.sql";
+import insertActivitiesSql from "@/sql/insert_activities.sql";
 import JSZip from "jszip";
 import type { Activity } from "@/types";
 import { useDuckDBContext } from "@/contexts/DuckDBContext";
@@ -10,7 +10,10 @@ export const useActivityTable = () => {
 
   const createTable = useCallback(
     async (path: string) => {
-      const sql = buildCreateActivitiesSql(path);
+      const sql = createActivitiesSql.replace(
+        "__PATH__",
+        path.replaceAll("'", "''"),
+      );
       await runQuery(sql);
     },
     [runQuery],
@@ -23,7 +26,10 @@ export const useActivityTable = () => {
       await registerFileText(path, jsonText);
       await createTable(path);
       {
-        const sql = buildInsertActivitiesSql(path);
+        const sql = insertActivitiesSql.replace(
+          "__PATH__",
+          path.replaceAll("'", "''"),
+        );
         await runQuery(sql);
       }
     },
