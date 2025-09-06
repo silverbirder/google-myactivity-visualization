@@ -1,8 +1,10 @@
-import React, { useEffect } from "react";
-import { useSearchWordCloud } from "@/hooks/useSearchWordCloud";
-import WordCloud from "@/components/WordCloud";
+"use client";
 
-const SearchWordCloud: React.FC = () => {
+import { useEffect } from "react";
+import { useSearchWordCloud } from "./search-word-cloud.hook";
+import { WordCloud } from "./word-cloud";
+
+export const SearchWordCloud: React.FC = () => {
   const { words, loading, error, fetchWords } = useSearchWordCloud();
 
   useEffect(() => {

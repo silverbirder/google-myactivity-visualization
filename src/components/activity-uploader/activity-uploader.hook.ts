@@ -3,9 +3,9 @@ import createActivitiesSql from "@/sql/create_activities.sql";
 import insertActivitiesSql from "@/sql/insert_activities.sql";
 import JSZip from "jszip";
 import type { Activity } from "@/types";
-import { useDuckDBContext } from "@/contexts/DuckDBContext";
+import { useDuckDBContext } from "@/contexts";
 
-export const useActivityTable = () => {
+export const useActivityUploader = () => {
   const { isLoading, error, runQuery, registerFileText } = useDuckDBContext();
 
   const createTable = useCallback(

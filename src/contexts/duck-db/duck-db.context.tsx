@@ -1,13 +1,11 @@
 "use client";
 
 import React, { createContext, useContext } from "react";
-import { useDuckDB, type UseDuckDBReturn } from "@/hooks/useDuckDB";
+import { useDuckDB, type UseDuckDBReturn } from "./duck-db.hook";
 
 type DuckDBContextValue = UseDuckDBReturn;
 
-const DuckDBContext = createContext<DuckDBContextValue | undefined>(
-  undefined,
-);
+const DuckDBContext = createContext<DuckDBContextValue | undefined>(undefined);
 
 export function DuckDBProvider({
   children,

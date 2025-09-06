@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from "react";
+import { useEffect, useRef } from "react";
 import * as d3 from "d3";
 import cloud from "d3-cloud";
 
@@ -24,7 +24,7 @@ interface WordCloudProps {
   height?: number;
 }
 
-const WordCloud: React.FC<WordCloudProps> = ({
+export const WordCloud: React.FC<WordCloudProps> = ({
   words,
   width = 600,
   height = 400,

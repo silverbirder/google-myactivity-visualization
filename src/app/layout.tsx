@@ -5,9 +5,8 @@ import { GoogleAnalytics } from "@next/third-parties/google";
 import { Geist } from "next/font/google";
 
 import { TRPCReactProvider } from "@/trpc/react";
-import { DuckDBProvider } from "@/contexts/DuckDBContext";
-import { Provider as ChakraProvider } from "@/components/ui/provider";
-import { Toaster } from "@/components/ui/toaster";
+import { DuckDBProvider } from "@/contexts";
+import { Provider as ChakraProvider, Toaster } from "@/components";
 
 const baseUrl =
   process.env.BASE_URL ?? "https://google-myactivity-visualization.vercel.app";

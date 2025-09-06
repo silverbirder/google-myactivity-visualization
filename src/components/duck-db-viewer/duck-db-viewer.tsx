@@ -1,7 +1,7 @@
 "use client";
 
-import React, { memo, useMemo, useState } from "react";
-import { useDuckDBContext } from "@/contexts/DuckDBContext";
+import { memo, useMemo, useState } from "react";
+import { useDuckDBContext } from "@/contexts";
 
 type Row = Record<string, string | number | boolean | null>;
 

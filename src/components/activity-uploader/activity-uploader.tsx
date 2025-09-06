@@ -1,16 +1,16 @@
-import React, { memo, useCallback } from "react";
+import { memo, useCallback } from "react";
+import { useActivityUploader } from "./activity-uploader.hook";
 
-export const ActivityUploader = memo(function ActivityUploader({
-  onUpload,
-}: {
-  onUpload: (file: File) => void;
-}) {
+export const ActivityUploader = memo(function ActivityUploader() {
+  const { handleFileUpload } = useActivityUploader();
   const handleChange = useCallback(
     (e: React.ChangeEvent<HTMLInputElement>) => {
       const file = e.target.files?.[0];
-      if (file) onUpload(file);
+      if (file) {
+        void handleFileUpload(file);
+      }
     },
-    [onUpload],
+    [handleFileUpload],
   );
 
   return (
