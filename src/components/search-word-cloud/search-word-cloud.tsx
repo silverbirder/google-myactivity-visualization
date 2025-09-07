@@ -3,9 +3,10 @@
 import { useEffect } from "react";
 import { useSearchWordCloud } from "./search-word-cloud.hook";
 import { WordCloud } from "./word-cloud";
+import { Skeleton } from "@chakra-ui/react";
 
-export const SearchWordCloud: React.FC = () => {
-  const { words, loading, error, fetchWords } = useSearchWordCloud();
+export const SearchWordCloud = () => {
+  const { words, loading, fetchWords } = useSearchWordCloud();
 
   useEffect(() => {
     void fetchWords();
@@ -13,9 +14,7 @@ export const SearchWordCloud: React.FC = () => {
 
   return (
     <div>
-      <h2>Google検索ワードクラウド</h2>
-      {loading && <div>Loading...</div>}
-      {error && <div style={{ color: "red" }}>{error}</div>}
+      {loading && <Skeleton width="600px" height="400px" />}
       {words.length > 0 ? (
         <WordCloud words={words} width={600} height={400} />
       ) : (

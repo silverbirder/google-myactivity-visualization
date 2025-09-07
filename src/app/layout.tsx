@@ -14,7 +14,7 @@ const baseUrl =
 export const metadata: Metadata = {
   metadataBase: new URL(baseUrl),
   title: "ActViz",
-  description: "Visualize your Google activity.",
+  description: "Googleマイアクティビティを可視化します。",
   robots: {
     index: true,
   },

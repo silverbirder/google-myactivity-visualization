@@ -6,12 +6,11 @@ import selectSearchWordsSql from "@/sql/select_search_words.sql";
 export function useSearchWordCloud() {
   const { isLoading, runQuery } = useDuckDBContext();
   const [words, setWords] = useState<WordCloudData>([]);
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
   const fetchWords = useCallback(async () => {
     if (isLoading) return;
-    setLoading(true);
     setError(null);
     try {
       const sql = selectSearchWordsSql.replace("__LIMIT__", String(100));

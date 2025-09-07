@@ -5,7 +5,7 @@ export default function manifest(): MetadataRoute.Manifest {
   return {
     name: "ActViz",
     short_name: "ActViz",
-    description: "Visualize your Google activity.",
+    description: "Googleマイアクティビティを可視化します。",
     start_url: "/",
     display: "standalone",
     background_color: "#fff",
