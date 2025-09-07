@@ -1,6 +1,6 @@
 import { useCallback } from "react";
-import createActivitiesSql from "@/sql/create_activities.sql";
-import insertActivitiesSql from "@/sql/insert_activities.sql";
+import createActivitiesSql from "./create_activities.sql";
+import insertActivitiesSql from "./insert_activities.sql";
 import JSZip from "jszip";
 import type { Activity } from "@/types";
 import { useDuckDBContext } from "@/contexts";

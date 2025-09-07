@@ -1,7 +1,7 @@
 import { useCallback, useState } from "react";
 import { useDuckDBContext } from "@/contexts";
 import type { WordCloudData } from "./word-cloud";
-import selectSearchWordsSql from "@/sql/select_search_words.sql";
+import selectSearchWordsSql from "./select_search_words.sql";
 
 export function useSearchWordCloud() {
   const { isLoading, runQuery } = useDuckDBContext();
