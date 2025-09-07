@@ -11,6 +11,7 @@ export default defineConfig({
       instances: [{ browser: "chromium" }],
       headless: true,
     },
+    exclude: ["**\/node_modules/**", "src/e2e/**/*.test.ts"],
   },
   optimizeDeps: {
     include: ["d3", "d3-cloud"],
