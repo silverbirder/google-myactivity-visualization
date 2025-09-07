@@ -17,7 +17,6 @@ export default function Page() {
             <Heading size="lg">Chrome検索履歴のWordCloud</Heading>
             <SearchWordCloud />
           </Stack>
-          {/*<DuckDBViewer defaultQuery={"SELECT * FROM activities LIMIT 10;"} />*/}
         </Stack>
       </Center>
     </Container>
