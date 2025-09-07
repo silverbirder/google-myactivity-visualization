@@ -15,8 +15,8 @@ export function useActivityViewer() {
     setIsQuerying(true);
     setQueryError(null);
     try {
-  const result = await runQuery(query);
-  setData(result as Record<string, unknown>[]);
+      const result = await runQuery(query);
+      setData(result as Record<string, unknown>[]);
     } catch (err) {
       setQueryError(err instanceof Error ? err.message : String(err));
     } finally {

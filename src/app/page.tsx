@@ -4,6 +4,7 @@ import {
   ActivityUploader,
   SearchWordCloud,
   ActivityViewer,
+  Heatmap,
 } from "@/components";
 import { Center, Container, Heading, Stack } from "@chakra-ui/react";
 
@@ -24,6 +25,10 @@ export default function Page() {
           <Stack>
             <Heading size="lg">アクティビティテーブル</Heading>
             <ActivityViewer />
+          </Stack>
+          <Stack>
+            <Heading size="lg">ヒートマップ</Heading>
+            <Heatmap />
           </Stack>
         </Stack>
       </Center>
