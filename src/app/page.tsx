@@ -1,6 +1,10 @@
 "use client";
 
-import { ActivityUploader, SearchWordCloud } from "@/components";
+import {
+  ActivityUploader,
+  SearchWordCloud,
+  ActivityViewer,
+} from "@/components";
 import { Center, Container, Heading, Stack } from "@chakra-ui/react";
 
 export default function Page() {
@@ -16,6 +20,10 @@ export default function Page() {
           <Stack>
             <Heading size="lg">Chrome検索履歴のWordCloud</Heading>
             <SearchWordCloud />
+          </Stack>
+          <Stack>
+            <Heading size="lg">アクティビティテーブル</Heading>
+            <ActivityViewer />
           </Stack>
         </Stack>
       </Center>
