@@ -1,7 +1,7 @@
 "use client";
 
-import { ActivityUploader, DuckDBViewer, SearchWordCloud } from "@/components";
-import { Center, Container, Heading, Stack, Text } from "@chakra-ui/react";
+import { ActivityUploader, SearchWordCloud } from "@/components";
+import { Center, Container, Heading, Stack } from "@chakra-ui/react";
 
 export default function Page() {
   return (

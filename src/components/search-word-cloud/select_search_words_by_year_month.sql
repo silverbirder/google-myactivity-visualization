@@ -5,5 +5,9 @@ FROM
 WHERE
     header = '検索'
     AND titleUrl LIKE 'https://www.google.com/search?%'
-LIMIT
-    __LIMIT__;
+    AND CAST(
+        strftime ('%Y', CAST(time AS TIMESTAMP)) AS INTEGER
+    ) = __YEAR__
+    AND CAST(
+        strftime ('%m', CAST(time AS TIMESTAMP)) AS INTEGER
+    ) = __MONTH__
