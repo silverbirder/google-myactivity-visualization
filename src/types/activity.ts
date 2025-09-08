@@ -1,3 +1,9 @@
+export type LocationInfo = {
+  name?: string;
+  url?: string;
+  source?: string;
+};
+
 export type Activity = {
   header: string;
   title: string;
@@ -5,4 +11,5 @@ export type Activity = {
   time: string;
   products: string[];
   activityControls: string[];
+  locationInfos?: string | null;
 };

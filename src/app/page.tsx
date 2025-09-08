@@ -6,6 +6,7 @@ import {
   ActivityViewer,
   Heatmap,
   Timeline,
+  SearchMap,
 } from "@/components";
 import { Center, Container, Heading, Stack } from "@chakra-ui/react";
 
@@ -34,6 +35,10 @@ export default function Page() {
           <Stack>
             <Heading size="lg">タイムライン</Heading>
             <Timeline />
+          </Stack>
+          <Stack>
+            <Heading size="lg">検索地図</Heading>
+            <SearchMap />
           </Stack>
         </Stack>
       </Center>
