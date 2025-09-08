@@ -22,12 +22,15 @@ export const useTimeline = (year: number, month: number) => {
       .replace("?", `'${month.toString().padStart(2, "0")}'`);
     const result = await runQuery(sql);
     const timeline: TimelineData = {};
+    const offsetHours = -new Date().getTimezoneOffset() / 60;
+    const offsetHoursInt = Math.round(offsetHours);
     (
       result as Array<{ hour: string | number; product: string; count: number }>
     ).forEach((row) => {
-      const hour = Number(row.hour);
-      timeline[hour] ??= {};
-      timeline[hour][row.product] = row.count;
+      const utcHour = Number(row.hour);
+      const localHour = (((utcHour + offsetHoursInt) % 24) + 24) % 24;
+      timeline[localHour] ??= {};
+      timeline[localHour][row.product] = row.count;
     });
     setData(timeline);
   }, [runQuery, year, month]);
