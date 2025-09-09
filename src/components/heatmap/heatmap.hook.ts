@@ -5,6 +5,7 @@ import selectCountsByDaySql from "./select_counts_by_day.sql";
 
 export function useHeatmap({ year, month }: { year: number; month: number }) {
   const { runQuery } = useDuckDBContext();
+  const [loading, setLoading] = useState(true);
   const [data, setData] = useState<{ day: number; count: number }[]>([]);
   const [error, setError] = useState<string | null>(null);
   const [productOptions, setProductOptions] = useState<string[]>([]);
@@ -24,6 +25,8 @@ export function useHeatmap({ year, month }: { year: number; month: number }) {
         setData(result as { day: number; count: number }[]);
       } catch (err) {
         setError(err instanceof Error ? err.message : String(err));
+      } finally {
+        setLoading(false);
       }
     };
     void fetchData();
@@ -90,5 +93,6 @@ export function useHeatmap({ year, month }: { year: number; month: number }) {
     productOptions,
     product,
     setProduct,
+    loading,
   };
 }

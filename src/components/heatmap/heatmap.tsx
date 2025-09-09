@@ -21,10 +21,14 @@ export const Heatmap = ({ yearMonth }: Props) => {
     productOptions,
     product,
     setProduct,
+    loading,
   } = useHeatmap({
     year,
     month,
   });
+
+  if (loading) return <div>読み込み中です</div>;
+  if (calendarCells.length === 0) return <div>結果が見つかりませんでした</div>;
 
   return (
     <Box>

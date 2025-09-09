@@ -20,11 +20,18 @@ type Props = {
 };
 
 export const Timeline = ({ yearMonth }: Props) => {
-  const { data, fetchTimeline } = useTimeline(yearMonth.year, yearMonth.month);
+  const { data, loading, fetchTimeline } = useTimeline(
+    yearMonth.year,
+    yearMonth.month,
+  );
 
   useEffect(() => {
     void fetchTimeline();
   }, [yearMonth.year, yearMonth.month, fetchTimeline]);
+
+  if (loading) return <div>読み込み中です</div>;
+  if (Object.keys(data).length === 0)
+    return <div>結果が見つかりませんでした</div>;
 
   return (
     <TimelineRoot>
