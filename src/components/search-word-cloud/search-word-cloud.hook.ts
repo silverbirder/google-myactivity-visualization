@@ -3,15 +3,14 @@ import { useDuckDBContext } from "@/contexts";
 import type { WordCloudData } from "./word-cloud";
 import selectSearchWordsByYearMonthSql from "./select_search_words_by_year_month.sql";
 
-export function useSearchWordCloud() {
-  const { isLoading, runQuery } = useDuckDBContext();
+export const useSearchWordCloud = () => {
+  const { runQuery } = useDuckDBContext();
   const [words, setWords] = useState<WordCloudData>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
   const fetchWords = useCallback(
     async (params: { year: number; month: number }) => {
-      if (isLoading) return;
       setError(null);
       setLoading(true);
       try {
@@ -40,7 +39,8 @@ export function useSearchWordCloud() {
         setLoading(false);
       }
     },
-    [isLoading, runQuery],
+    [runQuery],
   );
+
   return { words, loading, error, fetchWords };
-}
+};

@@ -4,16 +4,16 @@ import { useState, useCallback } from "react";
 import selectTimelineByMonthSql from "./select_timeline_by_month.sql";
 import { useDuckDBContext } from "@/contexts";
 
-export interface TimelineCell {
+export type TimelineCell = {
   hour: number;
   product: string;
   count: number;
-}
+};
 
 export type TimelineData = Record<number, Record<string, number>>;
 
 export const useTimeline = (year: number, month: number) => {
-  const { isLoading, runQuery } = useDuckDBContext();
+  const { runQuery } = useDuckDBContext();
   const [data, setData] = useState<TimelineData>({});
 
   const fetchTimeline = useCallback(async () => {
@@ -37,7 +37,6 @@ export const useTimeline = (year: number, month: number) => {
 
   return {
     data,
-    isLoading,
     fetchTimeline,
   };
 };

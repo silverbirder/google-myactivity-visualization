@@ -25,13 +25,7 @@ export const ActivityViewer = () => {
   const borderColor = "gray.200";
 
   return (
-    <Box
-      p={4}
-      borderWidth={1}
-      borderRadius="md"
-      borderColor={borderColor}
-      bg="white"
-    >
+    <Box p={4} borderWidth={1} borderRadius="md" borderColor={borderColor}>
       <Heading as="h3" size="md" mb={4}>
         Activity SQL Viewer
       </Heading>

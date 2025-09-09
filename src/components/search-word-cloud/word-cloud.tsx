@@ -18,17 +18,13 @@ type CloudWord = {
 
 export type WordCloudData = { text: string; value: number }[];
 
-interface WordCloudProps {
+type Props = {
   words: WordCloudData;
   width?: number;
   height?: number;
-}
+};
 
-export const WordCloud: React.FC<WordCloudProps> = ({
-  words,
-  width = 600,
-  height = 400,
-}) => {
+export const WordCloud = ({ words, width = 600, height = 400 }: Props) => {
   const svgRef = useRef<SVGSVGElement | null>(null);
   useEffect(() => {
     if (!words.length) return;
@@ -71,5 +67,3 @@ export const WordCloud: React.FC<WordCloudProps> = ({
 
   return <svg ref={svgRef}></svg>;
 };
-
-export default WordCloud;
