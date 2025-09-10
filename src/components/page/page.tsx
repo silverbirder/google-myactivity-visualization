@@ -1,12 +1,12 @@
 "use client";
 
 import {
-  ActivityUploader,
-  SearchWordCloud,
-  ActivityViewer,
-  Heatmap,
-  Timeline,
-  SearchMap,
+  ActivityUploaderContainer,
+  WordCloudContainer,
+  ActivityViewerContainer,
+  HeatmapContainer,
+  TimelineContainer,
+  SearchMapContainer,
 } from "@/components";
 import { usePage } from "./page.hook";
 import {
@@ -36,7 +36,7 @@ export const Page = () => {
           <Heading size="2xl">Googleマイアクティビティを可視化</Heading>
           <Stack gap="2">
             <Heading size="lg">ファイルをアップロード</Heading>
-            <ActivityUploader />
+            <ActivityUploaderContainer />
           </Stack>
           {!isYearMonthsLoading && yearMonths.length > 0 && (
             <NativeSelect.Root>
@@ -67,25 +67,25 @@ export const Page = () => {
             <>
               <Stack>
                 <Heading size="lg">Chrome検索履歴のWordCloud</Heading>
-                <SearchWordCloud yearMonth={selectedYearMonth} />
+                <WordCloudContainer yearMonth={selectedYearMonth} />
               </Stack>
               <Stack>
                 <Heading size="lg">ヒートマップ</Heading>
-                <Heatmap yearMonth={selectedYearMonth} />
+                <HeatmapContainer yearMonth={selectedYearMonth} />
               </Stack>
               <Stack>
                 <Heading size="lg">タイムライン</Heading>
-                <Timeline yearMonth={selectedYearMonth} />
+                <TimelineContainer yearMonth={selectedYearMonth} />
               </Stack>
               <Stack>
                 <Heading size="lg">検索地図</Heading>
-                <SearchMap yearMonth={selectedYearMonth} />
+                <SearchMapContainer yearMonth={selectedYearMonth} />
               </Stack>
             </>
           )}
           <Stack>
             <Heading size="lg">アクティビティテーブル</Heading>
-            <ActivityViewer />
+            <ActivityViewerContainer />
           </Stack>
         </Stack>
       </Center>

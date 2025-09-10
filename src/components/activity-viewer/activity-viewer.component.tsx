@@ -1,6 +1,5 @@
 "use client";
-import React from "react";
-import { useActivityViewer } from "./activity-viewer.hook";
+
 import {
   Box,
   Button,
@@ -11,17 +10,27 @@ import {
   Table,
 } from "@chakra-ui/react";
 
-export const ActivityViewer = () => {
-  const {
-    query,
-    setQuery,
-    data,
-    isQuerying,
-    queryError,
-    isLoading,
-    error,
-    executeQuery,
-  } = useActivityViewer();
+type Props = {
+  query: string;
+  setQuery: (query: string) => void;
+  data: Record<string, unknown>[];
+  isQuerying: boolean;
+  queryError: string | null;
+  isLoading: boolean;
+  error: string | null;
+  executeQuery: () => void;
+};
+
+export const ActivityViewerComponent = ({
+  query,
+  setQuery,
+  data,
+  isQuerying,
+  queryError,
+  isLoading,
+  error,
+  executeQuery,
+}: Props) => {
   const borderColor = "gray.200";
 
   return (

@@ -1,1 +1,1 @@
-export * from "./heatmap";
+export * from "./heatmap.container";

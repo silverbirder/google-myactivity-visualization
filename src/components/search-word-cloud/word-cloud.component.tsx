@@ -1,3 +1,5 @@
+"use client";
+
 import { useEffect, useRef } from "react";
 import * as d3 from "d3";
 import cloud from "d3-cloud";
@@ -24,7 +26,7 @@ type Props = {
   height?: number;
 };
 
-export const WordCloud = ({ words, width = 600, height = 400 }: Props) => {
+export const WordCloudComponent = ({ words, width = 600, height = 400 }: Props) => {
   const svgRef = useRef<SVGSVGElement | null>(null);
   useEffect(() => {
     if (!words.length) return;

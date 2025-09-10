@@ -1,25 +1,19 @@
-import { memo, useCallback } from "react";
-import { useActivityUploader } from "./activity-uploader.hook";
+"use client";
+
 import { Box, FileUpload, Icon } from "@chakra-ui/react";
+import type { ChangeEventHandler } from "react";
 import { LuUpload } from "react-icons/lu";
 
-export const ActivityUploader = memo(function ActivityUploader() {
-  const { handleFileUpload } = useActivityUploader();
-  const handleChange = useCallback(
-    (e: React.ChangeEvent<HTMLInputElement>) => {
-      const file = e.target.files?.[0];
-      if (file) {
-        void handleFileUpload(file);
-      }
-    },
-    [handleFileUpload],
-  );
+type Props = {
+  onFileUpload?: ChangeEventHandler;
+};
 
+export const ActivityUploaderComponent = ({ onFileUpload }: Props) => {
   return (
     <FileUpload.Root maxW="xl" alignItems="stretch" maxFiles={1}>
       <FileUpload.HiddenInput
         accept="application/json,.json,application/zip,application/x-zip-compressed,.zip"
-        onChange={handleChange}
+        onChange={onFileUpload}
       />
       <FileUpload.Dropzone>
         <Icon size="md" color="fg.muted">
@@ -32,6 +26,4 @@ export const ActivityUploader = memo(function ActivityUploader() {
       <FileUpload.List />
     </FileUpload.Root>
   );
-});
-
-ActivityUploader.displayName = "ActivityUploader";
+};

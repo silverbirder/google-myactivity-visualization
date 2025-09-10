@@ -1,7 +1,6 @@
 "use client";
 
-import { useEffect } from "react";
-import { useTimeline } from "./timeline.hook";
+import { type TimelineData } from "./timeline.hook";
 import {
   TimelineRoot,
   TimelineItem,
@@ -11,28 +10,14 @@ import {
   TimelineContent,
   TimelineTitle,
 } from "@chakra-ui/react";
-import type { YearMonth } from "@/types";
 
 const hours = Array.from({ length: 24 }, (_, i) => i + 1);
 
 type Props = {
-  yearMonth: YearMonth;
+  data: TimelineData;
 };
 
-export const Timeline = ({ yearMonth }: Props) => {
-  const { data, loading, fetchTimeline } = useTimeline(
-    yearMonth.year,
-    yearMonth.month,
-  );
-
-  useEffect(() => {
-    void fetchTimeline();
-  }, [yearMonth.year, yearMonth.month, fetchTimeline]);
-
-  if (loading) return <div>読み込み中です</div>;
-  if (Object.keys(data).length === 0)
-    return <div>結果が見つかりませんでした</div>;
-
+export const TimelineComponent = ({ data }: Props) => {
   return (
     <TimelineRoot>
       {hours.map((hour) => {

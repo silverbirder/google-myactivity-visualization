@@ -1,1 +1,1 @@
-export * from "./search-map";
+export * from "./search-map.container";

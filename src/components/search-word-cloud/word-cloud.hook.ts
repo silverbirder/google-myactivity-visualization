@@ -1,9 +1,16 @@
-import { useCallback, useState } from "react";
-import { useDuckDBContext } from "@/contexts";
-import type { WordCloudData } from "./word-cloud";
-import selectSearchWordsByYearMonthSql from "./select_search_words_by_year_month.sql";
+"use client";
 
-export const useSearchWordCloud = () => {
+import { useCallback, useEffect, useState } from "react";
+import { useDuckDBContext } from "@/contexts";
+import type { WordCloudData } from "./word-cloud.component";
+import selectSearchWordsByYearMonthSql from "./select_search_words_by_year_month.sql";
+import type { YearMonth } from "@/types";
+
+type Props = {
+  yearMonth: YearMonth;
+};
+
+export const useWordCloud = ({ yearMonth }: Props) => {
   const { runQuery } = useDuckDBContext();
   const [words, setWords] = useState<WordCloudData>([]);
   const [loading, setLoading] = useState(true);
@@ -42,5 +49,9 @@ export const useSearchWordCloud = () => {
     [runQuery],
   );
 
-  return { words, loading, error, fetchWords };
+  useEffect(() => {
+    void fetchWords(yearMonth);
+  }, [yearMonth, fetchWords]);
+
+  return { words, loading, error } as const;
 };

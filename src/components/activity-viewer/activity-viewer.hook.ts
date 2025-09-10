@@ -1,3 +1,5 @@
+"use client";
+
 import { useState } from "react";
 import { useDuckDBContext } from "@/contexts";
 
@@ -33,5 +35,5 @@ export function useActivityViewer() {
     isLoading,
     error,
     executeQuery,
-  };
+  } as const;
 }

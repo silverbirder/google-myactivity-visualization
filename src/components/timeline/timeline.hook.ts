@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useCallback } from "react";
+import { useState, useCallback, useEffect } from "react";
 import selectTimelineByMonthSql from "./select_timeline_by_month.sql";
 import { useDuckDBContext } from "@/contexts";
 
@@ -41,9 +41,12 @@ export const useTimeline = (year: number, month: number) => {
     }
   }, [runQuery, year, month]);
 
+  useEffect(() => {
+    void fetchTimeline();
+  }, [fetchTimeline]);
+
   return {
     data,
-    fetchTimeline,
     loading,
-  };
+  } as const;
 };

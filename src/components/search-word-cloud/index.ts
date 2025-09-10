@@ -1,1 +1,1 @@
-export * from "./search-word-cloud";
+export * from "./word-cloud.container";

@@ -2,34 +2,26 @@
 
 import { Grid, GridItem, Box, Text, NativeSelect } from "@chakra-ui/react";
 import { type ChangeEvent } from "react";
-import { useHeatmap } from "./heatmap.hook";
 
 const DAYS = ["日", "月", "火", "水", "木", "金", "土"];
 
-import type { YearMonth } from "@/types";
-
 type Props = {
-  yearMonth: YearMonth;
+  productOptions: string[];
+  product: string;
+  setProduct: (product: string) => void;
+  dayCountMap: Map<number, number>;
+  getColor: (count?: number) => string;
+  calendarCells: (number | null)[];
 };
 
-export const Heatmap = ({ yearMonth }: Props) => {
-  const { year, month } = yearMonth;
-  const {
-    dayCountMap,
-    getColor,
-    calendarCells,
-    productOptions,
-    product,
-    setProduct,
-    loading,
-  } = useHeatmap({
-    year,
-    month,
-  });
-
-  if (loading) return <div>読み込み中です</div>;
-  if (calendarCells.length === 0) return <div>結果が見つかりませんでした</div>;
-
+export const HeatmapComponent = ({
+  productOptions,
+  product,
+  setProduct,
+  dayCountMap,
+  getColor,
+  calendarCells,
+}: Props) => {
   return (
     <Box>
       <Box mb={2} display="flex" gap={2} alignItems="center">

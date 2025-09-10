@@ -1,1 +1,1 @@
-export * from "./activity-uploader";
+export * from "./activity-uploader.container";

@@ -1,1 +1,1 @@
-export * from "./activity-viewer";
+export * from "./activity-viewer.container";

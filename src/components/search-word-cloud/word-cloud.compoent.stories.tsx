@@ -1,10 +1,10 @@
 import type { Meta, StoryObj } from "@storybook/nextjs-vite";
 import { expect } from "storybook/test";
 
-import { WordCloud } from "./word-cloud";
+import { WordCloudComponent } from "./word-cloud.component";
 
 const meta = {
-  component: WordCloud,
+  component: WordCloudComponent,
   args: {
     words: [
       { text: "example", value: 10 },
@@ -37,7 +37,7 @@ const meta = {
       },
     },
   },
-} satisfies Meta<typeof WordCloud>;
+} satisfies Meta<typeof WordCloudComponent>;
 
 export default meta;
 type Story = StoryObj<typeof meta>;

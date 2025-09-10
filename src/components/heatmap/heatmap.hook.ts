@@ -1,3 +1,5 @@
+"use client";
+
 import { useState, useEffect, useMemo, useCallback } from "react";
 import { useDuckDBContext } from "@/contexts";
 import selectProductsSql from "./select_products.sql";
@@ -94,5 +96,5 @@ export function useHeatmap({ year, month }: { year: number; month: number }) {
     product,
     setProduct,
     loading,
-  };
+  } as const;
 }

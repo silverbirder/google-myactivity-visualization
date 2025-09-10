@@ -79,5 +79,15 @@ export const useActivityUploader = () => {
     [insertActivities],
   );
 
-  return { handleFileUpload, isLoading, error };
+  const handleChange = useCallback(
+    (e: React.ChangeEvent<HTMLInputElement>) => {
+      const file = e.target.files?.[0];
+      if (file) {
+        void handleFileUpload(file);
+      }
+    },
+    [handleFileUpload],
+  );
+
+  return { handleChange, isLoading, error } as const;
 };

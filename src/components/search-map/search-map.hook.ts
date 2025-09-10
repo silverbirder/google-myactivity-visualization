@@ -1,7 +1,9 @@
 "use client";
 
-import { useMemo } from "react";
+import { useEffect, useMemo, useState } from "react";
+import sqlQuery from "./select_activities_by_year_month.sql";
 import type { Activity, LocationInfo } from "@/types";
+import { useDuckDBContext } from "@/contexts";
 
 function decodeLatLngFromUrl(url: string): [number, number] | null {
   const match = /center=([\d.\-]+),([\d.\-]+)/.exec(url);
@@ -11,12 +13,27 @@ function decodeLatLngFromUrl(url: string): [number, number] | null {
   return null;
 }
 
-export function useSearchMap(
-  activities: Activity[],
-  year: number,
-  month: number,
-) {
-  return useMemo(() => {
+export function useSearchMap(year: number, month: number) {
+  const [loading, setLoading] = useState(true);
+  const [activities, setActivities] = useState<Activity[]>([]);
+  const { runQuery } = useDuckDBContext();
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const sql = sqlQuery
+          .replace("?", `'${year}'`)
+          .replace("?", `'${String(month).padStart(2, "0")}'`);
+        const data: unknown[] = await runQuery(sql);
+        setActivities(data as Activity[]);
+      } finally {
+        setLoading(false);
+      }
+    };
+    void fetchData();
+  }, [year, month, runQuery]);
+
+  const points = useMemo(() => {
     const points: { lat: number; lng: number; name?: string; url?: string }[] =
       [];
     activities.forEach((activity) => {
@@ -42,4 +59,6 @@ export function useSearchMap(
     });
     return points;
   }, [activities, year, month]);
+
+  return { points, loading } as const;
 }
