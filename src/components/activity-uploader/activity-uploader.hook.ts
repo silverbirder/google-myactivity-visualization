@@ -99,7 +99,7 @@ export const useActivityUploader = () => {
                 }));
                 await insertActivities(mapped);
               }
-            } catch (e) {
+            } catch {
               // パースエラーは無視してスキップ
             }
             const processedFiles = i + 1;
