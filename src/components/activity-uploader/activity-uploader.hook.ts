@@ -47,7 +47,11 @@ export const useActivityUploader = () => {
         try {
           const json = JSON.parse(text) as unknown;
           if (Array.isArray(json)) {
-            await insertActivities(json as Activity[]);
+            const mapped = (json as Activity[]).map((a) => ({
+              ...a,
+              time: a.time ? new Date(a.time).toLocaleString() : a.time,
+            }));
+            await insertActivities(mapped);
           }
         } catch {}
         return;
@@ -62,7 +66,11 @@ export const useActivityUploader = () => {
           try {
             const parsed = JSON.parse(content) as unknown;
             if (Array.isArray(parsed)) {
-              await insertActivities(parsed as Activity[]);
+              const mapped = (parsed as Activity[]).map((a) => ({
+                ...a,
+                time: a.time ? new Date(a.time).toLocaleString() : a.time,
+              }));
+              await insertActivities(mapped);
             }
           } catch {}
         }
