@@ -1,5 +1,6 @@
 export * from "./activity-uploader";
 export * from "./activity-viewer";
+export * from "./activity-deleter";
 export * from "./heatmap";
 export * from "./page";
 export * from "./search-map";

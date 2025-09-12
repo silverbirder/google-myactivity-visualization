@@ -4,6 +4,7 @@ import {
   ActivityUploaderContainer,
   WordCloudContainer,
   ActivityViewerContainer,
+  ActivityDeleterContainer,
   HeatmapContainer,
   TimelineContainer,
   SearchMapContainer,
@@ -37,6 +38,7 @@ export const Page = () => {
           <Stack gap="2">
             <Heading size="lg">ファイルをアップロード</Heading>
             <ActivityUploaderContainer />
+            <ActivityDeleterContainer />
           </Stack>
           {!isYearMonthsLoading && yearMonths.length > 0 && (
             <NativeSelect.Root>
