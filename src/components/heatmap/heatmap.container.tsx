@@ -4,6 +4,8 @@ import { useHeatmap } from "./heatmap.hook";
 
 import type { YearMonth } from "@/types";
 import { HeatmapComponent } from "./heatmap.component";
+import { Spinner } from "@chakra-ui/react";
+import { NotFoundEmptyState } from "..";
 
 type Props = {
   yearMonth: YearMonth;
@@ -24,8 +26,8 @@ export const HeatmapContainer = ({ yearMonth }: Props) => {
     month,
   });
 
-  if (loading) return <div>読み込み中です</div>;
-  if (calendarCells.length === 0) return <div>結果が見つかりませんでした</div>;
+  if (loading) return <Spinner />;
+  if (calendarCells.length === 0) return <NotFoundEmptyState />;
 
   return (
     <HeatmapComponent

@@ -2,6 +2,7 @@ export * from "./activity-uploader";
 export * from "./activity-viewer";
 export * from "./activity-deleter";
 export * from "./heatmap";
+export * from "./not-found-empty-state";
 export * from "./page";
 export * from "./search-map";
 export * from "./search-word-cloud";

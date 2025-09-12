@@ -15,6 +15,7 @@ import {
   Container,
   Heading,
   NativeSelect,
+  Spinner,
   Stack,
 } from "@chakra-ui/react";
 import type { ChangeEvent } from "react";
@@ -28,7 +29,7 @@ export const Page = () => {
     handleSelectedYearMonth,
   } = usePage();
 
-  if (isDuckDBLoading) <div>読み込み中です</div>;
+  if (isDuckDBLoading) return <Spinner />;
 
   return (
     <Container>
