@@ -7,6 +7,7 @@ import {
   Textarea,
   Spinner,
   Table,
+  Text,
 } from "@chakra-ui/react";
 
 type Props = {
@@ -60,23 +61,18 @@ export const ActivityViewerComponent = ({
           {error ?? queryError}
         </Box>
       )}
-      <Box
-        maxH="400px"
-        overflowY="auto"
-        overflowX="auto"
-        borderWidth={1}
-        borderRadius="md"
-        borderColor={borderColor}
-        mt={2}
-        maxW="600px"
-      >
-        <Box>
-          {data.length > 0 ? (
-            <Table.Root size="sm" striped>
+      <Box borderWidth={1} borderRadius="md" borderColor={borderColor} mt={2}>
+        {data.length > 0 ? (
+          <Table.ScrollArea width="100%" maxW="breakpoint-lg" height={400}>
+            <Table.Root size="sm" variant="outline">
               <Table.Header>
                 <Table.Row>
                   {Object.keys(data[0] ?? {}).map((key) => (
-                    <Table.ColumnHeader key={key}>{key}</Table.ColumnHeader>
+                    <Table.ColumnHeader key={key}>
+                      <Text fontSize="sm" fontWeight="bold">
+                        {key}
+                      </Text>
+                    </Table.ColumnHeader>
                   ))}
                 </Table.Row>
               </Table.Header>
@@ -84,18 +80,20 @@ export const ActivityViewerComponent = ({
                 {data.map((row, i) => (
                   <Table.Row key={i}>
                     {Object.entries(row).map(([key, value]) => (
-                      <Table.Cell key={key}>{value as string}</Table.Cell>
+                      <Table.Cell key={key}>
+                        <Text fontSize="sm">{value as string}</Text>
+                      </Table.Cell>
                     ))}
                   </Table.Row>
                 ))}
               </Table.Body>
             </Table.Root>
-          ) : (
-            <Box p={4} textAlign="center" color="gray.500">
-              データがありません
-            </Box>
-          )}
-        </Box>
+          </Table.ScrollArea>
+        ) : (
+          <Box p={4} width="100%" textAlign="center" color="gray.500">
+            データがありません
+          </Box>
+        )}
       </Box>
     </Box>
   );
