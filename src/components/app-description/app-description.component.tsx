@@ -1,23 +1,32 @@
-import { Box, Heading, Stack, Text, Icon, Card, List } from "@chakra-ui/react";
+import {
+  Box,
+  Heading,
+  Stack,
+  Text,
+  Icon,
+  Card,
+  List,
+  Flex,
+  Link,
+} from "@chakra-ui/react";
 import {
   FaInfoCircle,
   FaDownload,
   FaUpload,
   FaShieldAlt,
+  FaExternalLinkAlt,
 } from "react-icons/fa";
 
 export const AppDescriptionComponent = () => {
   return (
-    <Card.Root>
-      <Card.Body p="6">
+    <Card.Root borderColor="green.fg">
+      <Card.Body p="4">
         <Stack gap="4">
-          <Box textAlign="center">
-            <Icon size="xl" mb="2">
-              <FaInfoCircle />
-            </Icon>
+          <Flex gap="2" alignItems="center" justifyContent="center">
+            <FaInfoCircle size="1rem" />
             <Heading size="lg">このアプリについて</Heading>
-          </Box>
-          <List.Root gap="3" variant="plain" align="start">
+          </Flex>
+          <List.Root gap="2" variant="plain" align="start">
             <List.Item>
               <List.Indicator asChild>
                 <FaInfoCircle />
@@ -31,16 +40,25 @@ export const AppDescriptionComponent = () => {
                 <FaDownload />
               </List.Indicator>
               <Text fontSize="sm" fontWeight="medium">
-                <Text as="span" fontWeight="bold">
+                <Link
+                  href="https://takeout.google.com/"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  fontWeight="bold"
+                  color="blue.600"
+                  textDecoration="underline"
+                  _hover={{ color: "blue.800" }}
+                  marginRight="1"
+                >
                   Google Takeout
-                </Text>
-                から「マイアクティビティ」データをダウンロードしてください。
+                  <FaExternalLinkAlt size="0.8rem" />
+                </Link>
+                から「マイ アクティビティ」データをダウンロードしてください。
                 <Text as="span" color="red.600" fontWeight="bold">
-                  ダウンロード時のフォーマットは必ずJSONを選択してください。
+                  ダウンロード時は「複数の形式」→「アクティビティの記録」→「JSON」を選択してください。
                 </Text>
               </Text>
             </List.Item>
-
             <List.Item>
               <List.Indicator asChild>
                 <FaUpload />
@@ -49,16 +67,11 @@ export const AppDescriptionComponent = () => {
                 ダウンロードしたZIPファイルをそのまま、または解凍したJSONファイルを個別にアップロードしていただけます。
               </Text>
             </List.Item>
-
             <List.Item>
               <List.Indicator asChild>
                 <FaShieldAlt />
               </List.Indicator>
               <Text fontSize="sm" fontWeight="medium">
-                <Text as="span" fontWeight="bold">
-                  プライバシー保護
-                </Text>
-                ：
                 すべてのデータはブラウザ内でのみ処理され、外部サーバーには一切送信されません。
               </Text>
             </List.Item>

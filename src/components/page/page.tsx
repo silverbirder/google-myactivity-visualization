@@ -15,12 +15,14 @@ import { usePage } from "./page.hook";
 import {
   Center,
   Container,
+  Flex,
   Heading,
   NativeSelect,
   Spinner,
   Stack,
 } from "@chakra-ui/react";
 import type { ChangeEvent } from "react";
+import { LuChartColumn } from "react-icons/lu";
 
 export const Page = () => {
   const {
@@ -34,10 +36,15 @@ export const Page = () => {
   if (isDuckDBLoading) return <Spinner />;
 
   return (
-    <Container>
+    <Container maxWidth="breakpoint-lg" py="8">
       <Center>
         <Stack gap="4">
-          <Heading size="2xl">Googleマイアクティビティを可視化</Heading>
+          <Flex alignItems="center" gap="2" justifyContent="center">
+            <LuChartColumn size="2rem" color="green" />
+            <Heading size="4xl" color="green">
+              ActivityViz
+            </Heading>
+          </Flex>
           <AppDescriptionComponent />
           <Stack gap="2">
             <Heading size="lg">ファイルをアップロード</Heading>
