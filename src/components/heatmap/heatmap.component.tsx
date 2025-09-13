@@ -24,11 +24,11 @@ export const HeatmapComponent = ({
 }: Props) => {
   return (
     <Box>
-      <Box mb={2} display="flex" gap={2} alignItems="center">
+      <Box mb={2}>
         <NativeSelect.Root
           disabled={productOptions.length === 0}
           size="sm"
-          width="auto"
+          width="fit-content"
         >
           <NativeSelect.Field
             value={product}
@@ -44,9 +44,6 @@ export const HeatmapComponent = ({
           </NativeSelect.Field>
           <NativeSelect.Indicator />
         </NativeSelect.Root>
-        <Text fontWeight="bold" ml={2}>
-          {product} ヒートマップ
-        </Text>
       </Box>
       <Grid templateColumns="repeat(7, 1fr)" gap={1}>
         {DAYS.map((d) => (
