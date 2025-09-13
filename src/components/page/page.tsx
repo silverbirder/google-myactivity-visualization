@@ -20,17 +20,35 @@ import {
   NativeSelect,
   Spinner,
   Stack,
+  Button,
+  Text,
+  Flex,
+  Badge,
+  ScrollArea,
 } from "@chakra-ui/react";
 import type { ChangeEvent } from "react";
-import { LuChartColumn, LuDatabase, LuUpload, LuTrash2 } from "react-icons/lu";
+import {
+  LuChartColumn,
+  LuDatabase,
+  LuUpload,
+  LuTrash2,
+  LuEye,
+  LuGitCompare,
+  LuX,
+} from "react-icons/lu";
 
 export const Page = () => {
   const {
     isDuckDBLoading,
     isYearMonthsLoading,
     yearMonths,
+    viewMode,
     selectedYearMonth,
+    comparisonYearMonths,
     handleSelectedYearMonth,
+    handleViewModeChange,
+    handleAddComparisonYearMonth,
+    handleRemoveComparisonYearMonth,
     yearProductStatsRefreshTrigger,
     handleUploadComplete,
     handleDeleteComplete,
@@ -59,31 +77,115 @@ export const Page = () => {
             />
           </Stack>
           {!isYearMonthsLoading && yearMonths.length > 0 && (
-            <NativeSelect.Root width="fit-content">
-              <NativeSelect.Field
-                value={`${selectedYearMonth?.year}-${selectedYearMonth?.month}`}
-                placeholder="年月を選択してください。"
-                onChange={(e: ChangeEvent<HTMLSelectElement>) => {
-                  const [year, month] = e.target.value.split("-");
-                  handleSelectedYearMonth({
-                    year: Number(year),
-                    month: Number(month),
-                  });
-                }}
-              >
-                {yearMonths.map((yearMonth) => (
-                  <option
-                    key={`${yearMonth.year}-${yearMonth.month}`}
-                    value={`${yearMonth.year}-${yearMonth.month}`}
+            <Stack gap="4">
+              <Stack gap="2">
+                <Text fontWeight="semibold">表示モード</Text>
+                <HStack gap="2">
+                  <Button
+                    variant={viewMode === "single" ? "solid" : "outline"}
+                    size="sm"
+                    onClick={() => handleViewModeChange("single")}
                   >
-                    {yearMonth.year}年{yearMonth.month}月
-                  </option>
-                ))}
-              </NativeSelect.Field>
-              <NativeSelect.Indicator />
-            </NativeSelect.Root>
+                    <LuEye size="1rem" />
+                    シングル表示
+                  </Button>
+                  <Button
+                    variant={viewMode === "comparison" ? "solid" : "outline"}
+                    size="sm"
+                    onClick={() => handleViewModeChange("comparison")}
+                  >
+                    <LuGitCompare size="1rem" />
+                    比較表示
+                  </Button>
+                </HStack>
+              </Stack>
+              {viewMode === "single" && (
+                <NativeSelect.Root width="fit-content">
+                  <NativeSelect.Field
+                    value={`${selectedYearMonth?.year}-${selectedYearMonth?.month}`}
+                    placeholder="年月を選択してください。"
+                    onChange={(e: ChangeEvent<HTMLSelectElement>) => {
+                      const [year, month] = e.target.value.split("-");
+                      handleSelectedYearMonth({
+                        year: Number(year),
+                        month: Number(month),
+                      });
+                    }}
+                  >
+                    {yearMonths.map((yearMonth) => (
+                      <option
+                        key={`${yearMonth.year}-${yearMonth.month}`}
+                        value={`${yearMonth.year}-${yearMonth.month}`}
+                      >
+                        {yearMonth.year}年{yearMonth.month}月
+                      </option>
+                    ))}
+                  </NativeSelect.Field>
+                  <NativeSelect.Indicator />
+                </NativeSelect.Root>
+              )}
+              {viewMode === "comparison" && (
+                <Stack gap="2">
+                  <Text fontWeight="semibold">比較する年月</Text>
+                  <NativeSelect.Root width="fit-content">
+                    <NativeSelect.Field
+                      placeholder="年月を追加してください。"
+                      onChange={(e: ChangeEvent<HTMLSelectElement>) => {
+                        if (e.target.value) {
+                          const [year, month] = e.target.value.split("-");
+                          handleAddComparisonYearMonth({
+                            year: Number(year),
+                            month: Number(month),
+                          });
+                          e.target.value = "";
+                        }
+                      }}
+                    >
+                      {yearMonths
+                        .filter(
+                          (yearMonth) =>
+                            !comparisonYearMonths.some(
+                              (ym) =>
+                                ym.year === yearMonth.year &&
+                                ym.month === yearMonth.month,
+                            ),
+                        )
+                        .map((yearMonth) => (
+                          <option
+                            key={`${yearMonth.year}-${yearMonth.month}`}
+                            value={`${yearMonth.year}-${yearMonth.month}`}
+                          >
+                            {yearMonth.year}年{yearMonth.month}月
+                          </option>
+                        ))}
+                    </NativeSelect.Field>
+                    <NativeSelect.Indicator />
+                  </NativeSelect.Root>
+                  {comparisonYearMonths.length > 0 && (
+                    <Flex gap="2" wrap="wrap">
+                      {comparisonYearMonths.map((yearMonth) => (
+                        <Badge
+                          key={`${yearMonth.year}-${yearMonth.month}`}
+                          variant="solid"
+                          colorPalette="green"
+                          py="1"
+                          px="2"
+                          cursor="pointer"
+                          onClick={() =>
+                            handleRemoveComparisonYearMonth(yearMonth)
+                          }
+                        >
+                          {yearMonth.year}年{yearMonth.month}月
+                          <LuX size="0.8rem" style={{ marginLeft: "4px" }} />
+                        </Badge>
+                      ))}
+                    </Flex>
+                  )}
+                </Stack>
+              )}
+            </Stack>
           )}
-          {selectedYearMonth && (
+          {viewMode === "single" && selectedYearMonth && (
             <>
               <Stack>
                 <Heading size="lg">Chrome検索履歴のWordCloud</Heading>
@@ -102,6 +204,122 @@ export const Page = () => {
                 <SearchMapContainer yearMonth={selectedYearMonth} />
               </Stack>
             </>
+          )}
+          {viewMode === "comparison" && comparisonYearMonths.length > 0 && (
+            <ScrollArea.Root maxW="breakpoint-lg">
+              <ScrollArea.Viewport>
+                <HStack gap={6} p="2" alignItems="flex-start">
+                  {comparisonYearMonths.map((yearMonth) => (
+                    <Flex
+                      gap={4}
+                      direction="column"
+                      key={`comparison-${yearMonth.year}-${yearMonth.month}`}
+                      width={"300px"}
+                      flexShrink={0}
+                    >
+                      <Stack>
+                        <Heading size="lg">Chrome検索履歴のWordCloud</Heading>
+                        <WordCloudContainer yearMonth={yearMonth} />
+                      </Stack>
+                      <Stack>
+                        <Heading size="lg">ヒートマップ</Heading>
+                        <HeatmapContainer yearMonth={yearMonth} />
+                      </Stack>
+                      <Stack>
+                        <Heading size="lg">タイムライン</Heading>
+                        <TimelineContainer yearMonth={yearMonth} />
+                      </Stack>
+                      <Stack>
+                        <Heading size="lg">検索地図</Heading>
+                        <SearchMapContainer yearMonth={yearMonth} />
+                      </Stack>
+                    </Flex>
+                  ))}
+                </HStack>
+              </ScrollArea.Viewport>
+            </ScrollArea.Root>
+            // <Stack gap="6">
+            //   <Stack gap="2">
+            //     <Heading size="lg">Chrome検索履歴のWordCloud</Heading>
+            //     <Box overflowX="auto" pb="2">
+            //       <Flex gap="4">
+            //         {comparisonYearMonths.map((yearMonth) => (
+            //           <Box
+            //             key={`wordcloud-${yearMonth.year}-${yearMonth.month}`}
+            //             width="400px"
+            //           >
+            //             <Stack gap="2">
+            //               <Text fontWeight="semibold" textAlign="center">
+            //                 {yearMonth.year}年{yearMonth.month}月
+            //               </Text>
+            //               <WordCloudContainer yearMonth={yearMonth} />
+            //             </Stack>
+            //           </Box>
+            //         ))}
+            //       </Flex>
+            //     </Box>
+            //   </Stack>
+            //   <Stack gap="2">
+            //     <Heading size="lg">ヒートマップ</Heading>
+            //     <Box overflowX="auto" pb="2">
+            //       <Flex gap="4">
+            //         {comparisonYearMonths.map((yearMonth) => (
+            //           <Box
+            //             key={`heatmap-${yearMonth.year}-${yearMonth.month}`}
+            //             width="400px"
+            //           >
+            //             <Stack gap="2">
+            //               <Text fontWeight="semibold" textAlign="center">
+            //                 {yearMonth.year}年{yearMonth.month}月
+            //               </Text>
+            //               <HeatmapContainer yearMonth={yearMonth} />
+            //             </Stack>
+            //           </Box>
+            //         ))}
+            //       </Flex>
+            //     </Box>
+            //   </Stack>
+            //   <Stack gap="2">
+            //     <Heading size="lg">タイムライン</Heading>
+            //     <Box overflowX="auto" pb="2">
+            //       <Flex gap="4">
+            //         {comparisonYearMonths.map((yearMonth) => (
+            //           <Box
+            //             key={`timeline-${yearMonth.year}-${yearMonth.month}`}
+            //             width="400px"
+            //           >
+            //             <Stack gap="2">
+            //               <Text fontWeight="semibold" textAlign="center">
+            //                 {yearMonth.year}年{yearMonth.month}月
+            //               </Text>
+            //               <TimelineContainer yearMonth={yearMonth} />
+            //             </Stack>
+            //           </Box>
+            //         ))}
+            //       </Flex>
+            //     </Box>
+            //   </Stack>
+            //   <Stack gap="2">
+            //     <Heading size="lg">検索地図</Heading>
+            //     <Box overflowX="auto" pb="2">
+            //       <Flex gap="4">
+            //         {comparisonYearMonths.map((yearMonth) => (
+            //           <Box
+            //             key={`searchmap-${yearMonth.year}-${yearMonth.month}`}
+            //             width="400px"
+            //           >
+            //             <Stack gap="2">
+            //               <Text fontWeight="semibold" textAlign="center">
+            //                 {yearMonth.year}年{yearMonth.month}月
+            //               </Text>
+            //               <SearchMapContainer yearMonth={yearMonth} />
+            //             </Stack>
+            //           </Box>
+            //         ))}
+            //       </Flex>
+            //     </Box>
+            //   </Stack>
+            // </Stack>
           )}
           <Stack>
             <HStack gap="2">
