@@ -188,7 +188,7 @@ export const Page = () => {
           {viewMode === "single" && selectedYearMonth && (
             <>
               <Stack>
-                <Heading size="lg">Chrome検索履歴のWordCloud</Heading>
+                <Heading size="lg">WordCloud</Heading>
                 <WordCloudContainer yearMonth={selectedYearMonth} />
               </Stack>
               <Stack>
@@ -218,7 +218,7 @@ export const Page = () => {
                       flexShrink={0}
                     >
                       <Stack>
-                        <Heading size="lg">Chrome検索履歴のWordCloud</Heading>
+                        <Heading size="lg">WordCloud</Heading>
                         <WordCloudContainer yearMonth={yearMonth} />
                       </Stack>
                       <Stack>
@@ -238,88 +238,6 @@ export const Page = () => {
                 </HStack>
               </ScrollArea.Viewport>
             </ScrollArea.Root>
-            // <Stack gap="6">
-            //   <Stack gap="2">
-            //     <Heading size="lg">Chrome検索履歴のWordCloud</Heading>
-            //     <Box overflowX="auto" pb="2">
-            //       <Flex gap="4">
-            //         {comparisonYearMonths.map((yearMonth) => (
-            //           <Box
-            //             key={`wordcloud-${yearMonth.year}-${yearMonth.month}`}
-            //             width="400px"
-            //           >
-            //             <Stack gap="2">
-            //               <Text fontWeight="semibold" textAlign="center">
-            //                 {yearMonth.year}年{yearMonth.month}月
-            //               </Text>
-            //               <WordCloudContainer yearMonth={yearMonth} />
-            //             </Stack>
-            //           </Box>
-            //         ))}
-            //       </Flex>
-            //     </Box>
-            //   </Stack>
-            //   <Stack gap="2">
-            //     <Heading size="lg">ヒートマップ</Heading>
-            //     <Box overflowX="auto" pb="2">
-            //       <Flex gap="4">
-            //         {comparisonYearMonths.map((yearMonth) => (
-            //           <Box
-            //             key={`heatmap-${yearMonth.year}-${yearMonth.month}`}
-            //             width="400px"
-            //           >
-            //             <Stack gap="2">
-            //               <Text fontWeight="semibold" textAlign="center">
-            //                 {yearMonth.year}年{yearMonth.month}月
-            //               </Text>
-            //               <HeatmapContainer yearMonth={yearMonth} />
-            //             </Stack>
-            //           </Box>
-            //         ))}
-            //       </Flex>
-            //     </Box>
-            //   </Stack>
-            //   <Stack gap="2">
-            //     <Heading size="lg">タイムライン</Heading>
-            //     <Box overflowX="auto" pb="2">
-            //       <Flex gap="4">
-            //         {comparisonYearMonths.map((yearMonth) => (
-            //           <Box
-            //             key={`timeline-${yearMonth.year}-${yearMonth.month}`}
-            //             width="400px"
-            //           >
-            //             <Stack gap="2">
-            //               <Text fontWeight="semibold" textAlign="center">
-            //                 {yearMonth.year}年{yearMonth.month}月
-            //               </Text>
-            //               <TimelineContainer yearMonth={yearMonth} />
-            //             </Stack>
-            //           </Box>
-            //         ))}
-            //       </Flex>
-            //     </Box>
-            //   </Stack>
-            //   <Stack gap="2">
-            //     <Heading size="lg">検索地図</Heading>
-            //     <Box overflowX="auto" pb="2">
-            //       <Flex gap="4">
-            //         {comparisonYearMonths.map((yearMonth) => (
-            //           <Box
-            //             key={`searchmap-${yearMonth.year}-${yearMonth.month}`}
-            //             width="400px"
-            //           >
-            //             <Stack gap="2">
-            //               <Text fontWeight="semibold" textAlign="center">
-            //                 {yearMonth.year}年{yearMonth.month}月
-            //               </Text>
-            //               <SearchMapContainer yearMonth={yearMonth} />
-            //             </Stack>
-            //           </Box>
-            //         ))}
-            //       </Flex>
-            //     </Box>
-            //   </Stack>
-            // </Stack>
           )}
           <Stack>
             <HStack gap="2">
