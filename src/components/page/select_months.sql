@@ -11,5 +11,5 @@ GROUP BY
     year,
     month
 ORDER BY
-    year,
-    month;
+    year DESC,
+    month DESC;

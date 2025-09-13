@@ -9,7 +9,7 @@ import {
 
 export const AppDescriptionComponent = () => {
   return (
-    <Card.Root backgroundColor="green.50" borderColor="green.100">
+    <Card.Root backgroundColor="bg.muted">
       <Card.Body p="4">
         <Stack gap="4">
           <Flex gap="2" alignItems="center" justifyContent="center">

@@ -31,10 +31,14 @@ export const ActivityViewerComponent = ({
   error,
   executeQuery,
 }: Props) => {
-  const borderColor = "gray.200";
-
   return (
-    <Box p={4} borderWidth="1px" borderRadius="md">
+    <Box
+      p={4}
+      borderWidth="1px"
+      borderRadius="md"
+      maxW="breakpoint-lg"
+      width="100%"
+    >
       <Stack
         direction={{ base: "column", md: "row" }}
         gap={4}
@@ -61,47 +65,50 @@ export const ActivityViewerComponent = ({
           {error ?? queryError}
         </Box>
       )}
-      <Box
-        borderWidth={1}
-        borderRadius="md"
-        borderColor={borderColor}
-        mt={2}
-        maxW="breakpoint-lg"
-        width="100%"
-      >
-        {data.length > 0 ? (
-          <Table.ScrollArea width="100%" height={400}>
-            <Table.Root size="sm" variant="outline">
-              <Table.Header>
-                <Table.Row>
-                  {Object.keys(data[0] ?? {}).map((key) => (
-                    <Table.ColumnHeader key={key}>
-                      <Text fontSize="sm" fontWeight="bold">
-                        {key}
-                      </Text>
-                    </Table.ColumnHeader>
+      {data.length > 0 ? (
+        <Table.ScrollArea
+          width="100%"
+          height={400}
+          borderWidth="1px"
+          borderRadius="md"
+        >
+          <Table.Root size="sm" variant="outline">
+            <Table.Header>
+              <Table.Row>
+                {Object.keys(data[0] ?? {}).map((key) => (
+                  <Table.ColumnHeader key={key}>
+                    <Text fontSize="sm" fontWeight="bold">
+                      {key}
+                    </Text>
+                  </Table.ColumnHeader>
+                ))}
+              </Table.Row>
+            </Table.Header>
+            <Table.Body>
+              {data.map((row, i) => (
+                <Table.Row key={i}>
+                  {Object.entries(row).map(([key, value]) => (
+                    <Table.Cell key={key}>
+                      <Text fontSize="sm">{value as string}</Text>
+                    </Table.Cell>
                   ))}
                 </Table.Row>
-              </Table.Header>
-              <Table.Body>
-                {data.map((row, i) => (
-                  <Table.Row key={i}>
-                    {Object.entries(row).map(([key, value]) => (
-                      <Table.Cell key={key}>
-                        <Text fontSize="sm">{value as string}</Text>
-                      </Table.Cell>
-                    ))}
-                  </Table.Row>
-                ))}
-              </Table.Body>
-            </Table.Root>
-          </Table.ScrollArea>
-        ) : (
-          <Box p={4} width="100%" textAlign="center" color="gray.500">
-            データがありません
-          </Box>
-        )}
-      </Box>
+              ))}
+            </Table.Body>
+          </Table.Root>
+        </Table.ScrollArea>
+      ) : (
+        <Box
+          width="100%"
+          height={400}
+          borderWidth="1px"
+          borderRadius="md"
+          textAlign={"center"}
+          lineHeight="400px"
+        >
+          データがありません
+        </Box>
+      )}
     </Box>
   );
 };
