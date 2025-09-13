@@ -3,8 +3,14 @@
 import { useActivityDeleter } from "./activity-deleter.hook";
 import { ActivityDeleterComponent } from "./activity-deleter.component";
 
-export const ActivityDeleterContainer = () => {
-  const { handleDeleteAll, isDeleting, statusText } = useActivityDeleter();
+type Props = {
+  onDeleteComplete?: () => void;
+};
+
+export const ActivityDeleterContainer = ({ onDeleteComplete }: Props) => {
+  const { handleDeleteAll, isDeleting, statusText } = useActivityDeleter({
+    onDeleteComplete,
+  });
 
   return (
     <ActivityDeleterComponent

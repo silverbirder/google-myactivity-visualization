@@ -46,6 +46,10 @@ export const usePage = () => {
     setYearProductStatsRefreshTrigger((prev) => prev + 1);
   }, [fetchMonths]);
 
+  const handleDeleteComplete = useCallback(() => {
+    window.location.reload();
+  }, []);
+
   return {
     isDuckDBLoading,
     isYearMonthsLoading,
@@ -56,5 +60,6 @@ export const usePage = () => {
     refetchYearMonths: fetchMonths,
     yearProductStatsRefreshTrigger,
     handleUploadComplete,
+    handleDeleteComplete,
   } as const;
 };

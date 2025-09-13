@@ -9,6 +9,7 @@ import {
   SearchMapContainer,
   YearProductStatsContainer,
   AppDescriptionComponent,
+  ActivityDeleterContainer,
 } from "@/components";
 import { usePage } from "./page.hook";
 import {
@@ -21,7 +22,7 @@ import {
   Stack,
 } from "@chakra-ui/react";
 import type { ChangeEvent } from "react";
-import { LuChartColumn, LuDatabase, LuUpload } from "react-icons/lu";
+import { LuChartColumn, LuDatabase, LuUpload, LuTrash2 } from "react-icons/lu";
 
 export const Page = () => {
   const {
@@ -32,6 +33,7 @@ export const Page = () => {
     handleSelectedYearMonth,
     yearProductStatsRefreshTrigger,
     handleUploadComplete,
+    handleDeleteComplete,
   } = usePage();
 
   if (isDuckDBLoading) return <Spinner />;
@@ -116,6 +118,13 @@ export const Page = () => {
               <Heading size="lg">SQL Viewer</Heading>
             </HStack>
             <ActivityViewerContainer />
+          </Stack>
+          <Stack>
+            <HStack gap="2">
+              <LuTrash2 size="1.5rem" color="green" />
+              <Heading size="lg">データ削除</Heading>
+            </HStack>
+            <ActivityDeleterContainer onDeleteComplete={handleDeleteComplete} />
           </Stack>
         </Stack>
       </Center>
