@@ -3,9 +3,13 @@
 import { useActivityUploader } from "./activity-uploader.hook";
 import { ActivityUploaderComponent } from "./activity-uploader.component";
 
-export const ActivityUploaderContainer = () => {
+type Props = {
+  onUploadComplete?: () => void;
+};
+
+export const ActivityUploaderContainer = ({ onUploadComplete }: Props) => {
   const { handleChange, isUploading, progress, uploadingStatusText } =
-    useActivityUploader();
+    useActivityUploader({ onUploadComplete });
 
   return (
     <ActivityUploaderComponent

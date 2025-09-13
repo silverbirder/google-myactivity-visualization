@@ -46,5 +46,6 @@ export const usePage = () => {
     error,
     selectedYearMonth,
     handleSelectedYearMonth,
+    refetchYearMonths: fetchMonths,
   } as const;
 };

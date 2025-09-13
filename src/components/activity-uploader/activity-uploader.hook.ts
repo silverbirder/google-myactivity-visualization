@@ -12,7 +12,14 @@ type UploadProgress = {
   message: string;
 };
 
-export const useActivityUploader = () => {
+type UseActivityUploaderOptions = {
+  onUploadComplete?: () => void;
+};
+
+export const useActivityUploader = (
+  options: UseActivityUploaderOptions = {},
+) => {
+  const { onUploadComplete } = options;
   const { isLoading, error, runQuery, registerFileText } = useDuckDBContext();
   const [isUploading, setIsUploading] = useState(false);
   const [uploadError, setUploadError] = useState<string | null>(null);
@@ -119,6 +126,7 @@ export const useActivityUploader = () => {
             percent: 100,
             message: "完了",
           }));
+          onUploadComplete?.();
         } catch (e) {
           const msg = e instanceof Error ? e.message : String(e);
           setUploadError(msg);
@@ -156,6 +164,7 @@ export const useActivityUploader = () => {
             percent: 100,
             message: "完了",
           });
+          onUploadComplete?.();
         } else {
           throw new Error("JSON の配列形式ではありません");
         }
@@ -167,7 +176,7 @@ export const useActivityUploader = () => {
         setIsUploading(false);
       }
     },
-    [insertActivities],
+    [insertActivities, onUploadComplete],
   );
 
   const handleChange = useCallback(

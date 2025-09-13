@@ -30,6 +30,7 @@ export const Page = () => {
     yearMonths,
     selectedYearMonth,
     handleSelectedYearMonth,
+    refetchYearMonths,
   } = usePage();
 
   if (isDuckDBLoading) return <Spinner />;
@@ -50,7 +51,7 @@ export const Page = () => {
               <LuUpload size="1.5rem" color="green" />
               <Heading size="lg">ファイルをアップロード</Heading>
             </Flex>
-            <ActivityUploaderContainer />
+            <ActivityUploaderContainer onUploadComplete={refetchYearMonths} />
           </Stack>
           {!isYearMonthsLoading && yearMonths.length > 0 && (
             <NativeSelect.Root>
