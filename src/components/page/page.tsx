@@ -8,6 +8,7 @@ import {
   HeatmapContainer,
   TimelineContainer,
   SearchMapContainer,
+  YearProductStatsContainer,
 } from "@/components";
 import { usePage } from "./page.hook";
 import {
@@ -86,10 +87,16 @@ export const Page = () => {
               </Stack>
             </>
           )}
-          <Stack>
-            <Heading size="lg">アクティビティテーブル</Heading>
-            <ActivityViewerContainer />
-          </Stack>
+          <Container maxWidth="breakpoint-md">
+            <Stack>
+              <Heading size="lg">年別製品統計</Heading>
+              <YearProductStatsContainer />
+            </Stack>
+            <Stack>
+              <Heading size="lg">アクティビティテーブル</Heading>
+              <ActivityViewerContainer />
+            </Stack>
+          </Container>
         </Stack>
       </Center>
     </Container>
