@@ -3,7 +3,7 @@ import { iconSizes } from "./icon";
 
 export default function manifest(): MetadataRoute.Manifest {
   return {
-    name: "ActViz",
+    name: "ActivityViz",
     short_name: "ActViz",
     description: "Googleマイアクティビティを可視化します。",
     start_url: "/",

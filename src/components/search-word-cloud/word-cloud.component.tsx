@@ -26,7 +26,11 @@ type Props = {
   height?: number;
 };
 
-export const WordCloudComponent = ({ words, width = 600, height = 400 }: Props) => {
+export const WordCloudComponent = ({
+  words,
+  width = 600,
+  height = 400,
+}: Props) => {
   const svgRef = useRef<SVGSVGElement | null>(null);
   useEffect(() => {
     if (!words.length) return;
@@ -44,8 +48,10 @@ export const WordCloudComponent = ({ words, width = 600, height = 400 }: Props) 
       const svg = d3.select(svgRef.current);
       svg.selectAll("*").remove();
       svg
-        .attr("width", width)
-        .attr("height", height)
+        .attr("width", "100%")
+        .attr("height", "100%")
+        .attr("viewBox", `0 0 ${width} ${height}`)
+        .attr("preserveAspectRatio", "xMidYMid meet")
         .append("g")
         .attr("transform", `translate(${width / 2},${height / 2})`)
         .selectAll("text")
@@ -67,5 +73,9 @@ export const WordCloudComponent = ({ words, width = 600, height = 400 }: Props) 
     }
   }, [words, width, height]);
 
-  return <svg ref={svgRef}></svg>;
+  return (
+    <div style={{ width: "100%", height: "100%", minHeight: "200px" }}>
+      <svg ref={svgRef} style={{ width: "100%", height: "100%" }}></svg>
+    </div>
+  );
 };
