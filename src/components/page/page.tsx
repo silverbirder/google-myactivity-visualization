@@ -9,6 +9,7 @@ import {
   TimelineContainer,
   SearchMapContainer,
   YearProductStatsContainer,
+  AppDescriptionComponent,
 } from "@/components";
 import { usePage } from "./page.hook";
 import {
@@ -37,6 +38,7 @@ export const Page = () => {
       <Center>
         <Stack gap="4">
           <Heading size="2xl">Googleマイアクティビティを可視化</Heading>
+          <AppDescriptionComponent />
           <Stack gap="2">
             <Heading size="lg">ファイルをアップロード</Heading>
             <ActivityUploaderContainer />
