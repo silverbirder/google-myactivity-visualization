@@ -119,13 +119,17 @@ export const Page = () => {
             </HStack>
             <ActivityViewerContainer />
           </Stack>
-          <Stack>
-            <HStack gap="2">
-              <LuTrash2 size="1.5rem" color="green" />
-              <Heading size="lg">データ削除</Heading>
-            </HStack>
-            <ActivityDeleterContainer onDeleteComplete={handleDeleteComplete} />
-          </Stack>
+          {!isYearMonthsLoading && yearMonths.length > 0 && (
+            <Stack>
+              <HStack gap="2">
+                <LuTrash2 size="1.5rem" color="green" />
+                <Heading size="lg">データ削除</Heading>
+              </HStack>
+              <ActivityDeleterContainer
+                onDeleteComplete={handleDeleteComplete}
+              />
+            </Stack>
+          )}
         </Stack>
       </Center>
     </Container>

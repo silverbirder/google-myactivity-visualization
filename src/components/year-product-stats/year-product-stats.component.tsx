@@ -67,7 +67,7 @@ export const YearProductStatsComponent = ({ tableData }: Props) => {
             <Table.Row key={year}>
               <Table.Cell
                 fontWeight="bold"
-                backgroundColor="gray.100"
+                backgroundColor="bg.muted"
                 width="60px"
               >
                 <Text fontSize="sm" fontWeight="bold">
