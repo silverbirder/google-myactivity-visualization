@@ -1,45 +1,35 @@
+import { Heading, Stack, Text, Card, List, Flex, Link } from "@chakra-ui/react";
 import {
-  Box,
-  Heading,
-  Stack,
-  Text,
-  Icon,
-  Card,
-  List,
-  Flex,
-  Link,
-} from "@chakra-ui/react";
-import {
-  FaInfoCircle,
-  FaDownload,
-  FaUpload,
-  FaShieldAlt,
-  FaExternalLinkAlt,
-} from "react-icons/fa";
+  LuDownload,
+  LuExternalLink,
+  LuInfo,
+  LuShield,
+  LuUpload,
+} from "react-icons/lu";
 
 export const AppDescriptionComponent = () => {
   return (
-    <Card.Root borderColor="green.fg">
+    <Card.Root backgroundColor="green.50" borderColor="green.100">
       <Card.Body p="4">
         <Stack gap="4">
           <Flex gap="2" alignItems="center" justifyContent="center">
-            <FaInfoCircle size="1rem" />
+            <LuInfo size="1rem" />
             <Heading size="lg">このアプリについて</Heading>
           </Flex>
           <List.Root gap="2" variant="plain" align="start">
             <List.Item>
               <List.Indicator asChild>
-                <FaInfoCircle />
+                <LuInfo />
               </List.Indicator>
-              <Text fontSize="sm" fontWeight="medium">
+              <Text fontSize="sm">
                 Googleマイアクティビティデータを可視化し、活動パターンを分析できるWebアプリケーションです。
               </Text>
             </List.Item>
             <List.Item>
               <List.Indicator asChild>
-                <FaDownload />
+                <LuDownload />
               </List.Indicator>
-              <Text fontSize="sm" fontWeight="medium">
+              <Text fontSize="sm">
                 <Link
                   href="https://takeout.google.com/"
                   target="_blank"
@@ -51,7 +41,7 @@ export const AppDescriptionComponent = () => {
                   marginRight="1"
                 >
                   Google Takeout
-                  <FaExternalLinkAlt size="0.8rem" />
+                  <LuExternalLink size="0.8rem" />
                 </Link>
                 から「マイ アクティビティ」データをダウンロードしてください。
                 <Text as="span" color="red.600" fontWeight="bold">
@@ -61,17 +51,17 @@ export const AppDescriptionComponent = () => {
             </List.Item>
             <List.Item>
               <List.Indicator asChild>
-                <FaUpload />
+                <LuUpload />
               </List.Indicator>
-              <Text fontSize="sm" fontWeight="medium">
+              <Text fontSize="sm">
                 ダウンロードしたZIPファイルをそのまま、または解凍したJSONファイルを個別にアップロードしていただけます。
               </Text>
             </List.Item>
             <List.Item>
               <List.Indicator asChild>
-                <FaShieldAlt />
+                <LuShield />
               </List.Indicator>
-              <Text fontSize="sm" fontWeight="medium">
+              <Text fontSize="sm">
                 すべてのデータはブラウザ内でのみ処理され、外部サーバーには一切送信されません。
               </Text>
             </List.Item>

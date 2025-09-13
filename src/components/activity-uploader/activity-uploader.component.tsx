@@ -1,13 +1,6 @@
 "use client";
 
-import {
-  Box,
-  FileUpload,
-  Icon,
-  Progress,
-  Text,
-  VStack,
-} from "@chakra-ui/react";
+import { Box, FileUpload, Progress, Text, VStack } from "@chakra-ui/react";
 import type { ChangeEventHandler } from "react";
 import { LuUpload } from "react-icons/lu";
 
@@ -25,18 +18,21 @@ export const ActivityUploaderComponent = ({
   statusText = "",
 }: Props) => {
   return (
-    <VStack align="stretch" maxW="xl" gap={3}>
+    <VStack align="stretch">
+      <Text color="fg.muted">
+        Google
+        Takeoutからダウンロードしたマイアクティビティファイルをアップロードしてください
+      </Text>
       <FileUpload.Root alignItems="stretch" maxFiles={1}>
-        <FileUpload.HiddenInput
-          accept="application/json,.json,application/zip,application/x-zip-compressed,.zip"
-          onChange={onFileUpload}
-        />
+        <FileUpload.HiddenInput accept=".json,.zip" onChange={onFileUpload} />
         <FileUpload.Dropzone>
-          <Icon size="md" color="fg.muted">
-            <LuUpload />
-          </Icon>
+          <LuUpload size="2rem" />
           <FileUpload.DropzoneContent>
-            <Box>ここにファイルをドラッグ＆ドロップ</Box>
+            <Text fontSize="lg" fontWeight="bold">
+              ここにファイルをドラッグ＆ドロップ
+            </Text>
+            <Text fontSize="sm">または、クリックしてファイルを選択</Text>
+            <Text fontSize="sm">対応形式: JSON, ZIP</Text>
           </FileUpload.DropzoneContent>
         </FileUpload.Dropzone>
         <FileUpload.List />
