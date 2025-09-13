@@ -30,7 +30,8 @@ export const Page = () => {
     yearMonths,
     selectedYearMonth,
     handleSelectedYearMonth,
-    refetchYearMonths,
+    yearProductStatsRefreshTrigger,
+    handleUploadComplete,
   } = usePage();
 
   if (isDuckDBLoading) return <Spinner />;
@@ -51,7 +52,9 @@ export const Page = () => {
               <LuUpload size="1.5rem" color="green" />
               <Heading size="lg">ファイルをアップロード</Heading>
             </HStack>
-            <ActivityUploaderContainer onUploadComplete={refetchYearMonths} />
+            <ActivityUploaderContainer
+              onUploadComplete={handleUploadComplete}
+            />
           </Stack>
           {!isYearMonthsLoading && yearMonths.length > 0 && (
             <NativeSelect.Root width="fit-content">
@@ -103,7 +106,9 @@ export const Page = () => {
               <LuChartColumn size="1.5rem" color="green" />
               <Heading size="lg">年別製品統計</Heading>
             </HStack>
-            <YearProductStatsContainer />
+            <YearProductStatsContainer
+              refetchTrigger={yearProductStatsRefreshTrigger}
+            />
           </Stack>
           <Stack>
             <HStack gap="2">

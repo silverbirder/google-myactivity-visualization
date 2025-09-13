@@ -11,6 +11,8 @@ export const usePage = () => {
   const [selectedYearMonth, setSelectedYearMonth] = useState<YearMonth | null>(
     null,
   );
+  const [yearProductStatsRefreshTrigger, setYearProductStatsRefreshTrigger] =
+    useState(0);
 
   const fetchMonths = useCallback(async () => {
     if (isDuckDBLoading) return;
@@ -39,6 +41,11 @@ export const usePage = () => {
     setSelectedYearMonth(yearMonth);
   }, []);
 
+  const handleUploadComplete = useCallback(() => {
+    void fetchMonths();
+    setYearProductStatsRefreshTrigger((prev) => prev + 1);
+  }, [fetchMonths]);
+
   return {
     isDuckDBLoading,
     isYearMonthsLoading,
@@ -47,5 +54,7 @@ export const usePage = () => {
     selectedYearMonth,
     handleSelectedYearMonth,
     refetchYearMonths: fetchMonths,
+    yearProductStatsRefreshTrigger,
+    handleUploadComplete,
   } as const;
 };
