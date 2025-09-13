@@ -3,7 +3,6 @@
 import {
   Box,
   Button,
-  Heading,
   Stack,
   Textarea,
   Spinner,
@@ -34,10 +33,7 @@ export const ActivityViewerComponent = ({
   const borderColor = "gray.200";
 
   return (
-    <Box p={4} borderWidth={1} borderRadius="md" borderColor={borderColor}>
-      <Heading as="h3" size="md" mb={4}>
-        Activity SQL Viewer
-      </Heading>
+    <Box p={4} borderWidth="1px" borderRadius="md">
       <Stack
         direction={{ base: "column", md: "row" }}
         gap={4}
@@ -48,15 +44,9 @@ export const ActivityViewerComponent = ({
           value={query}
           onChange={(e) => setQuery(e.target.value)}
           rows={4}
-          fontFamily="mono"
           flex={1}
         />
-        <Button
-          onClick={executeQuery}
-          loading={isQuerying || isLoading}
-          colorScheme="blue"
-          minWidth={24}
-        >
+        <Button onClick={executeQuery} loading={isQuerying || isLoading}>
           実行
         </Button>
       </Stack>

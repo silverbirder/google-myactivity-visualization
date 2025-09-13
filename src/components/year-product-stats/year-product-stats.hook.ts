@@ -13,7 +13,58 @@ export type YearProductStatsData = {
 export type YearProductStatsTable = {
   years: number[];
   products: string[];
-  data: Map<string, number>; // key: "year-product", value: count
+  data: Map<string, number>;
+};
+
+export type YearProductStatsChartData = {
+  year: number;
+  [productName: string]: number;
+};
+
+export const convertTableToChartData = (
+  tableData: YearProductStatsTable,
+): {
+  chartData: YearProductStatsChartData[];
+  series: Array<{ name: string; color: string }>;
+} => {
+  const chartData: YearProductStatsChartData[] = tableData.years.map((year) => {
+    const yearData: YearProductStatsChartData = { year };
+    tableData.products.forEach((product) => {
+      const count = tableData.data.get(`${year}-${product}`) ?? 0;
+      yearData[product] = typeof count === "bigint" ? Number(count) : count;
+    });
+    return yearData;
+  });
+
+  const colorPalette = [
+    "blue.solid",
+    "green.solid",
+    "orange.solid",
+    "purple.solid",
+    "teal.solid",
+    "red.solid",
+    "yellow.solid",
+    "pink.solid",
+    "cyan.solid",
+    "gray.solid",
+    "blue.emphasized",
+    "green.emphasized",
+    "orange.emphasized",
+    "purple.emphasized",
+    "teal.emphasized",
+    "red.emphasized",
+    "yellow.emphasized",
+    "pink.emphasized",
+    "cyan.emphasized",
+    "gray.emphasized",
+  ];
+
+  const series = tableData.products.map((product, index) => ({
+    name: product,
+    color: colorPalette[index % colorPalette.length] ?? "blue.solid",
+  }));
+
+  return { chartData, series };
 };
 
 export const useYearProductStats = () => {
@@ -33,16 +84,20 @@ export const useYearProductStats = () => {
       const result = await runQuery(selectYearProductStatsSql);
       const data = result as YearProductStatsData[];
 
-      // 年とproductのユニークな値を取得
-      const years = Array.from(new Set(data.map((d) => d.year))).sort(
-        (a, b) => b - a,
-      );
+      const years = Array.from(
+        new Set(
+          data.map((d) =>
+            typeof d.year === "bigint" ? Number(d.year) : d.year,
+          ),
+        ),
+      ).sort((a, b) => a - b);
       const products = Array.from(new Set(data.map((d) => d.product))).sort();
 
-      // Map形式でデータを格納
       const dataMap = new Map<string, number>();
       data.forEach((d) => {
-        dataMap.set(`${d.year}-${d.product}`, d.count);
+        const year = typeof d.year === "bigint" ? Number(d.year) : d.year;
+        const count = typeof d.count === "bigint" ? Number(d.count) : d.count;
+        dataMap.set(`${year}-${d.product}`, count);
       });
 
       setTableData({

@@ -14,14 +14,14 @@ import { usePage } from "./page.hook";
 import {
   Center,
   Container,
-  Flex,
   Heading,
+  HStack,
   NativeSelect,
   Spinner,
   Stack,
 } from "@chakra-ui/react";
 import type { ChangeEvent } from "react";
-import { LuChartColumn, LuUpload } from "react-icons/lu";
+import { LuChartColumn, LuDatabase, LuUpload } from "react-icons/lu";
 
 export const Page = () => {
   const {
@@ -36,25 +36,25 @@ export const Page = () => {
   if (isDuckDBLoading) return <Spinner />;
 
   return (
-    <Container maxWidth="breakpoint-lg" py="8">
+    <Container width="100%" maxWidth="breakpoint-lg" py="8">
       <Center>
         <Stack gap="6">
-          <Flex alignItems="center" gap="2" justifyContent="center">
+          <HStack gap="2" justifyContent="center">
             <LuChartColumn size="2rem" color="green" />
             <Heading size="4xl" color="green">
               ActivityViz
             </Heading>
-          </Flex>
+          </HStack>
           <AppDescriptionComponent />
           <Stack gap="2">
-            <Flex alignItems="center" gap="2" justifyContent="flex-start">
+            <HStack gap="2">
               <LuUpload size="1.5rem" color="green" />
               <Heading size="lg">ファイルをアップロード</Heading>
-            </Flex>
+            </HStack>
             <ActivityUploaderContainer onUploadComplete={refetchYearMonths} />
           </Stack>
           {!isYearMonthsLoading && yearMonths.length > 0 && (
-            <NativeSelect.Root>
+            <NativeSelect.Root width="fit-content">
               <NativeSelect.Field
                 value={`${selectedYearMonth?.year}-${selectedYearMonth?.month}`}
                 placeholder="年月を選択してください。"
@@ -98,16 +98,20 @@ export const Page = () => {
               </Stack>
             </>
           )}
-          <Container maxWidth="breakpoint-md">
-            <Stack>
+          <Stack>
+            <HStack gap="2">
+              <LuChartColumn size="1.5rem" color="green" />
               <Heading size="lg">年別製品統計</Heading>
-              <YearProductStatsContainer />
-            </Stack>
-            <Stack>
-              <Heading size="lg">アクティビティテーブル</Heading>
-              <ActivityViewerContainer />
-            </Stack>
-          </Container>
+            </HStack>
+            <YearProductStatsContainer />
+          </Stack>
+          <Stack>
+            <HStack gap="2">
+              <LuDatabase size="1.5rem" color="green" />
+              <Heading size="lg">SQL Viewer</Heading>
+            </HStack>
+            <ActivityViewerContainer />
+          </Stack>
         </Stack>
       </Center>
     </Container>

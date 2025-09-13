@@ -22,6 +22,7 @@
     "build-storybook": "storybook build"
   },
   "dependencies": {
+    "@chakra-ui/charts": "^3.26.0",
     "@chakra-ui/react": "^3.26.0",
     "@duckdb/duckdb-wasm": "^1.29.1-dev132.0",
     "@emotion/react": "^11.14.0",
@@ -41,6 +42,7 @@
     "react-dom": "^19.0.0",
     "react-icons": "^5.5.0",
     "react-leaflet": "^5.0.0",
+    "recharts": "^3.2.0",
     "server-only": "^0.0.1",
     "superjson": "^2.2.1",
     "zod": "^3.24.2"
