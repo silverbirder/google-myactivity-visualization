@@ -21,7 +21,6 @@ import {
   Spinner,
   Stack,
   Button,
-  Text,
   Flex,
   Badge,
   ScrollArea,
