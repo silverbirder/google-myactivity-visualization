@@ -61,9 +61,16 @@ export const ActivityViewerComponent = ({
           {error ?? queryError}
         </Box>
       )}
-      <Box borderWidth={1} borderRadius="md" borderColor={borderColor} mt={2}>
+      <Box
+        borderWidth={1}
+        borderRadius="md"
+        borderColor={borderColor}
+        mt={2}
+        maxW="breakpoint-lg"
+        width="100%"
+      >
         {data.length > 0 ? (
-          <Table.ScrollArea width="100%" maxW="breakpoint-lg" height={400}>
+          <Table.ScrollArea width="100%" height={400}>
             <Table.Root size="sm" variant="outline">
               <Table.Header>
                 <Table.Row>
