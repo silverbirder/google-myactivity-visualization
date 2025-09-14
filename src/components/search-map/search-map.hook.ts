@@ -60,6 +60,7 @@ export function useSearchMap(year: number, month: number) {
       name?: string;
       url?: string;
       product?: string;
+      title?: string;
     }[] = [];
     activities.forEach((activity) => {
       const date = new Date(activity.time);
@@ -77,6 +78,7 @@ export function useSearchMap(year: number, month: number) {
                 name: info.name,
                 url: info.url,
                 product: activity.product,
+                title: activity.title,
               });
             }
           }

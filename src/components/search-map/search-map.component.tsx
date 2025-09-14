@@ -19,6 +19,7 @@ type MarkerData = {
   name?: string;
   url?: string;
   product?: string;
+  title?: string;
 };
 
 const MapCenterUpdater = ({ position }: { position?: Position }) => {
@@ -56,6 +57,7 @@ const SearchMapComponent = ({
     name?: string;
     url?: string;
     product?: string;
+    title?: string;
   }[];
   productOptions: string[];
   product: string;
@@ -73,6 +75,7 @@ const SearchMapComponent = ({
         name: p.name,
         url: p.url,
         product: p.product,
+        title: p.title,
       })),
     [points],
   );
@@ -116,7 +119,13 @@ const SearchMapComponent = ({
           {points.map((p, i) => (
             <Marker key={i} position={[p.lat, p.lng] as LatLngTuple}>
               <Popup>
-                {p.name} {p.product && <>（{p.product}）</>}
+                {p.title && (
+                  <>
+                    <strong>{p.title}</strong>
+                    <br />
+                  </>
+                )}
+                {p.name}
                 <br />
                 <a href={p.url} target="_blank" rel="noopener noreferrer">
                   地図で見る

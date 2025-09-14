@@ -1,5 +1,6 @@
 SELECT
     time,
+    title,
     locationInfos,
     UNNEST(json_extract(products, '$')::VARCHAR[]) AS product
 FROM
