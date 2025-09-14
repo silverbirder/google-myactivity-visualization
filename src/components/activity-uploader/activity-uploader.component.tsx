@@ -1,8 +1,15 @@
 "use client";
 
-import { Box, FileUpload, Progress, Text, VStack } from "@chakra-ui/react";
+import {
+  Box,
+  Button,
+  FileUpload,
+  Progress,
+  Text,
+  VStack,
+} from "@chakra-ui/react";
 import type { ChangeEventHandler } from "react";
-import { LuUpload } from "react-icons/lu";
+import { LuUpload, LuDownload } from "react-icons/lu";
 
 type Props = {
   onFileUpload?: ChangeEventHandler;
@@ -17,12 +24,33 @@ export const ActivityUploaderComponent = ({
   progressPercent = 0,
   statusText = "",
 }: Props) => {
+  const handleSampleDownload = () => {
+    const link = document.createElement("a");
+    link.href = "/sample-myactivity.json";
+    link.download = "sample-myactivity.json";
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  };
+
   return (
-    <VStack align="stretch">
+    <VStack align="stretch" gap={4}>
       <Text color="fg.muted">
         Google
         Takeoutからダウンロードしたマイアクティビティファイルをアップロードしてください
       </Text>
+      <Box bg="bg.muted" p={4} borderRadius="md">
+        <Text fontSize="sm" fontWeight="semibold" mb={2}>
+          初めてご利用の方へ
+        </Text>
+        <Text fontSize="sm" color="fg.muted" mb={3}>
+          可視化がどんな感じになるか試してみたい方は、サンプルデータをダウンロードしてアップロードしてみてください。
+        </Text>
+        <Button size="sm" variant="outline" onClick={handleSampleDownload}>
+          <LuDownload />
+          サンプルデータをダウンロード
+        </Button>
+      </Box>
       <FileUpload.Root alignItems="stretch" maxFiles={1}>
         <FileUpload.HiddenInput accept=".json,.zip" onChange={onFileUpload} />
         <FileUpload.Dropzone>
