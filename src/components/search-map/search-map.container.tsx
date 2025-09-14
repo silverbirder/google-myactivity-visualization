@@ -3,7 +3,7 @@
 import dynamic from "next/dynamic";
 import { useSearchMap } from "./search-map.hook";
 import type { YearMonth } from "@/types";
-import { Spinner } from "@chakra-ui/react";
+import { Skeleton } from "@chakra-ui/react";
 
 const Map = dynamic(() => import("./search-map.component"), { ssr: false });
 
@@ -18,7 +18,7 @@ export const SearchMapContainer = ({ yearMonth }: Props) => {
     month,
   );
 
-  if (loading) return <Spinner />;
+  if (loading) return <Skeleton height="444px" width="100%" />;
 
   return (
     <Map

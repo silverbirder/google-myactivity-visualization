@@ -1,6 +1,6 @@
 "use client";
 
-import { Spinner } from "@chakra-ui/react";
+import { Skeleton } from "@chakra-ui/react";
 import { YearProductStatsComponent } from "./year-product-stats.component";
 import { useYearProductStats } from "./year-product-stats.hook";
 import { NotFoundEmptyState } from "..";
@@ -19,7 +19,7 @@ export const YearProductStatsContainer = ({ refetchTrigger }: Props) => {
     }
   }, [refetchTrigger, refetch]);
 
-  if (loading) return <Spinner />;
+  if (loading) return <Skeleton height="400px" width="100%" />;
   if (tableData.years.length === 0)
     return (
       <NotFoundEmptyState

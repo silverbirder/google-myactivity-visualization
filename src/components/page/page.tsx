@@ -18,12 +18,12 @@ import {
   Heading,
   HStack,
   NativeSelect,
-  Spinner,
   Stack,
   Button,
   Flex,
   Badge,
   ScrollArea,
+  Skeleton,
 } from "@chakra-ui/react";
 import type { ChangeEvent } from "react";
 import {
@@ -53,7 +53,30 @@ export const Page = () => {
     handleDeleteComplete,
   } = usePage();
 
-  if (isDuckDBLoading) return <Spinner />;
+  if (isDuckDBLoading) {
+    return (
+      <Container width="100%" maxWidth="breakpoint-lg" py="8">
+        <Center>
+          <Stack gap="6">
+            <HStack gap="2" justifyContent="center">
+              <LuChartColumn size="2rem" color="green" />
+              <Heading size="4xl" color="green">
+                ActivityViz
+              </Heading>
+            </HStack>
+            <AppDescriptionComponent />
+            <Stack gap="2">
+              <HStack gap="2">
+                <LuUpload size="1.5rem" color="green" />
+                <Heading size="lg">ファイルをアップロード</Heading>
+              </HStack>
+              <Skeleton height="200px" />
+            </Stack>
+          </Stack>
+        </Center>
+      </Container>
+    );
+  }
 
   return (
     <Container width="100%" maxWidth="breakpoint-lg" py="8">
@@ -75,6 +98,11 @@ export const Page = () => {
               onUploadComplete={handleUploadComplete}
             />
           </Stack>
+          {isYearMonthsLoading && (
+            <Stack gap="4">
+              <Skeleton height="12" />
+            </Stack>
+          )}
           {!isYearMonthsLoading && yearMonths.length > 0 && (
             <HStack justifyContent="space-between" alignItems="flex-start">
               <Stack gap="4">

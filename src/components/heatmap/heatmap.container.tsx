@@ -4,7 +4,7 @@ import { useHeatmap } from "./heatmap.hook";
 
 import type { YearMonth } from "@/types";
 import { HeatmapComponent } from "./heatmap.component";
-import { Spinner } from "@chakra-ui/react";
+import { Skeleton } from "@chakra-ui/react";
 import { NotFoundEmptyState } from "..";
 
 type Props = {
@@ -26,7 +26,7 @@ export const HeatmapContainer = ({ yearMonth }: Props) => {
     month,
   });
 
-  if (loading) return <Spinner />;
+  if (loading) return <Skeleton height="288px" width="100%" />;
   if (calendarCells.length === 0) return <NotFoundEmptyState />;
 
   return (
