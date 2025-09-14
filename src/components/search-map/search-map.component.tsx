@@ -1,11 +1,18 @@
 "use client";
 
-import { MapContainer, TileLayer, Marker, Popup, useMap } from "react-leaflet";
+import {
+  MapContainer,
+  TileLayer,
+  Marker,
+  Popup,
+  useMap,
+  useMapEvents,
+} from "react-leaflet";
 import L from "leaflet";
 import "leaflet/dist/leaflet.css";
 import type { LatLngTuple } from "leaflet";
 import { Box, NativeSelect } from "@chakra-ui/react";
-import { useEffect, useMemo, type ChangeEvent } from "react";
+import { useEffect, useMemo, useState, type ChangeEvent } from "react";
 
 L.Icon.Default.mergeOptions({
   iconUrl: "/leaflet/marker-icon.png",
@@ -22,6 +29,86 @@ type MarkerData = {
   title?: string;
 };
 
+type ClusterData = {
+  position: LatLngTuple;
+  markers: MarkerData[];
+  count: number;
+};
+
+const calculateDistance = (pos1: LatLngTuple, pos2: LatLngTuple): number => {
+  const latlng1 = L.latLng(pos1[0], pos1[1]);
+  const latlng2 = L.latLng(pos2[0], pos2[1]);
+  return latlng1.distanceTo(latlng2);
+};
+
+const clusterMarkers = (
+  markers: MarkerData[],
+  maxDistance = 100,
+): ClusterData[] => {
+  const clusters: ClusterData[] = [];
+  const usedMarkers = new Set<number>();
+
+  markers.forEach((marker, index) => {
+    if (usedMarkers.has(index)) return;
+
+    const clusterMarkers = [marker];
+    usedMarkers.add(index);
+
+    markers.forEach((otherMarker, otherIndex) => {
+      if (usedMarkers.has(otherIndex)) return;
+
+      const distance = calculateDistance(marker.position, otherMarker.position);
+      if (distance <= maxDistance) {
+        clusterMarkers.push(otherMarker);
+        usedMarkers.add(otherIndex);
+      }
+    });
+
+    const centerLat =
+      clusterMarkers.reduce((sum, m) => sum + m.position[0], 0) /
+      clusterMarkers.length;
+    const centerLng =
+      clusterMarkers.reduce((sum, m) => sum + m.position[1], 0) /
+      clusterMarkers.length;
+
+    clusters.push({
+      position: [centerLat, centerLng],
+      markers: clusterMarkers,
+      count: clusterMarkers.length,
+    });
+  });
+
+  return clusters;
+};
+
+const createClusterIcon = (count: number): L.DivIcon => {
+  const size = count === 1 ? 25 : Math.min(40 + Math.log(count) * 5, 60);
+  const className =
+    count === 1
+      ? "single-marker"
+      : `cluster-marker cluster-${count < 10 ? "small" : count < 100 ? "medium" : "large"}`;
+
+  return L.divIcon({
+    html: `<div style="
+      background-color: ${count === 1 ? "transparent" : count < 10 ? "#3388ff" : count < 100 ? "#ff8833" : "#ff3333"};
+      color: white;
+      border-radius: 50%;
+      width: ${size}px;
+      height: ${size}px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: bold;
+      font-size: ${count < 10 ? "12px" : "14px"};
+      border: 2px solid white;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.3);
+    ">${count === 1 ? "" : count}</div>`,
+    className,
+    iconSize: [size, size],
+    iconAnchor: [size / 2, size / 2],
+  });
+};
+
 const MapCenterUpdater = ({ position }: { position?: Position }) => {
   const map = useMap();
   useEffect(() => {
@@ -29,6 +116,16 @@ const MapCenterUpdater = ({ position }: { position?: Position }) => {
       map.setView(position, map.getZoom());
     }
   }, [position, map]);
+  return null;
+};
+
+const ZoomHandler = ({ onZoomEnd }: { onZoomEnd: (zoom: number) => void }) => {
+  useMapEvents({
+    zoomend: (e) => {
+      const map = e.target as L.Map;
+      onZoomEnd(map.getZoom());
+    },
+  });
   return null;
 };
 
@@ -63,6 +160,8 @@ const SearchMapComponent = ({
   product: string;
   setProduct: (product: string) => void;
 }) => {
+  const [zoom, setZoom] = useState(14);
+
   const center: LatLngTuple =
     points[0]?.lat !== undefined && points[0]?.lng !== undefined
       ? [points[0].lat, points[0].lng]
@@ -79,6 +178,17 @@ const SearchMapComponent = ({
       })),
     [points],
   );
+
+  const clusterDistance = useMemo(() => {
+    if (zoom >= 16) return 50;
+    if (zoom >= 14) return 100;
+    if (zoom >= 12) return 200;
+    return 500;
+  }, [zoom]);
+
+  const clusters = useMemo(() => {
+    return clusterMarkers(markers, clusterDistance);
+  }, [markers, clusterDistance]);
 
   return (
     <Box>
@@ -107,32 +217,91 @@ const SearchMapComponent = ({
       <Box h="400px" w="100%">
         <MapContainer
           center={center}
-          zoom={14}
+          zoom={zoom}
           style={{ height: "100%", width: "100%" }}
         >
           <TileLayer
             attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
             url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
           />
+          <ZoomHandler onZoomEnd={setZoom} />
           <MarkersBoundsUpdater markers={markers} />
           <MapCenterUpdater position={center} />
-          {points.map((p, i) => (
-            <Marker key={i} position={[p.lat, p.lng] as LatLngTuple}>
-              <Popup>
-                {p.title && (
-                  <>
-                    <strong>{p.title}</strong>
-                    <br />
-                  </>
-                )}
-                {p.name}
-                <br />
-                <a href={p.url} target="_blank" rel="noopener noreferrer">
-                  地図で見る
-                </a>
-              </Popup>
-            </Marker>
-          ))}
+          {clusters.map((cluster, i) => {
+            const firstMarker = cluster.markers[0];
+            return (
+              <Marker
+                key={i}
+                position={cluster.position}
+                icon={
+                  cluster.count === 1
+                    ? undefined
+                    : createClusterIcon(cluster.count)
+                }
+              >
+                <Popup maxWidth={300}>
+                  {cluster.count === 1 && firstMarker ? (
+                    <div>
+                      {firstMarker.title && (
+                        <>
+                          <strong>{firstMarker.title}</strong>
+                          <br />
+                        </>
+                      )}
+                      {firstMarker.name}
+                      <br />
+                      {firstMarker.url && (
+                        <a
+                          href={firstMarker.url}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                        >
+                          地図で見る
+                        </a>
+                      )}
+                    </div>
+                  ) : (
+                    <div style={{ maxHeight: "200px", overflowY: "auto" }}>
+                      <strong>{cluster.count}個の地点</strong>
+                      <br />
+                      <br />
+                      {cluster.markers.map((marker, idx) => (
+                        <div
+                          key={idx}
+                          style={{
+                            marginBottom: "8px",
+                            paddingBottom: "8px",
+                            borderBottom:
+                              idx < cluster.markers.length - 1
+                                ? "1px solid #eee"
+                                : "none",
+                          }}
+                        >
+                          {marker.title && (
+                            <>
+                              <strong>{marker.title}</strong>
+                              <br />
+                            </>
+                          )}
+                          {marker.name}
+                          <br />
+                          {marker.url && (
+                            <a
+                              href={marker.url}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                            >
+                              地図で見る
+                            </a>
+                          )}
+                        </div>
+                      ))}
+                    </div>
+                  )}
+                </Popup>
+              </Marker>
+            );
+          })}
         </MapContainer>
       </Box>
     </Box>
