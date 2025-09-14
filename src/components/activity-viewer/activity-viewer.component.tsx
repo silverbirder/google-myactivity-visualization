@@ -36,7 +36,12 @@ export const ActivityViewerComponent = ({
       p={4}
       borderWidth="1px"
       borderRadius="md"
-      maxW="breakpoint-lg"
+      maxW={{
+        base: "340px",
+        sm: "breakpoint-sm",
+        md: "breakpoint-md",
+        lg: "breakpoint-lg",
+      }}
       width="100%"
     >
       <Stack

@@ -44,7 +44,12 @@ export const YearProductStatsComponent = ({ tableData }: Props) => {
   const TableView = () => (
     <Table.ScrollArea
       width="100%"
-      maxW="breakpoint-lg"
+      maxW={{
+        base: "340px",
+        sm: "breakpoint-sm",
+        md: "breakpoint-md",
+        lg: "breakpoint-lg",
+      }}
       borderWidth="1px"
       borderRadius="md"
       height={400}
@@ -92,7 +97,16 @@ export const YearProductStatsComponent = ({ tableData }: Props) => {
   );
 
   const ChartView = () => (
-    <Chart.Root chart={chart} height={400}>
+    <Chart.Root
+      chart={chart}
+      maxW={{
+        base: "340px",
+        sm: "breakpoint-sm",
+        md: "breakpoint-md",
+        lg: "breakpoint-lg",
+      }}
+      height={400}
+    >
       <LineChart data={chart.data}>
         <CartesianGrid
           stroke={chart.color("border.muted") as string}

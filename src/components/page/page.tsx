@@ -54,7 +54,16 @@ export const Page = () => {
 
   if (isDuckDBLoading) {
     return (
-      <Container width="100%" maxWidth="breakpoint-lg" py="8">
+      <Container
+        width="100%"
+        maxW={{
+          base: "340px",
+          sm: "breakpoint-sm",
+          md: "breakpoint-md",
+          lg: "breakpoint-lg",
+        }}
+        py="8"
+      >
         <Center>
           <Stack gap="6">
             <HStack gap="2" justifyContent="center">
@@ -78,7 +87,16 @@ export const Page = () => {
   }
 
   return (
-    <Container width="100%" maxWidth="breakpoint-lg" py="8">
+    <Container
+      width="100%"
+      maxW={{
+        base: "340px",
+        sm: "breakpoint-sm",
+        md: "breakpoint-md",
+        lg: "breakpoint-lg",
+      }}
+      py="8"
+    >
       <Center>
         <Stack gap="6">
           <HStack gap="2" justifyContent="center">
@@ -103,7 +121,12 @@ export const Page = () => {
             </Stack>
           )}
           {!isYearMonthsLoading && yearMonths.length > 0 && (
-            <HStack justifyContent="space-between" alignItems="flex-start">
+            <Flex
+              justifyContent="space-between"
+              alignItems="flex-start"
+              wrap="wrap"
+              gap="2"
+            >
               <Stack gap="4">
                 <YearMonthSelectorContainer
                   yearMonths={yearMonths}
@@ -115,7 +138,7 @@ export const Page = () => {
                   onRemoveComparisonYearMonth={handleRemoveComparisonYearMonth}
                 />
               </Stack>
-              <HStack gap="2">
+              <Flex gap="2" wrap="wrap">
                 <Button
                   variant={viewMode === "single" ? "solid" : "outline"}
                   size="sm"
@@ -132,8 +155,8 @@ export const Page = () => {
                   <LuArrowLeftRight size="1rem" />
                   比較表示
                 </Button>
-              </HStack>
-            </HStack>
+              </Flex>
+            </Flex>
           )}
           {viewMode === "single" && selectedYearMonth && (
             <>
@@ -184,7 +207,14 @@ export const Page = () => {
             </>
           )}
           {viewMode === "comparison" && comparisonYearMonths.length > 0 && (
-            <ScrollArea.Root maxW="breakpoint-lg">
+            <ScrollArea.Root
+              maxW={{
+                base: "340px",
+                sm: "breakpoint-sm",
+                md: "breakpoint-md",
+                lg: "breakpoint-lg",
+              }}
+            >
               <ScrollArea.Viewport>
                 <HStack gap={6} p="2" alignItems="flex-start">
                   {comparisonYearMonths.map((yearMonth) => (
