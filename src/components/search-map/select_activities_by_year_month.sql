@@ -5,5 +5,12 @@ SELECT
 FROM
     activities
 WHERE
-    strftime ('%Y', CAST(time AS TIMESTAMP)) = ?
-    AND strftime ('%m', CAST(time AS TIMESTAMP)) = ?;
+    strftime ('%Y', CAST(time AS TIMESTAMP)) = '__YEAR__'
+    AND strftime ('%m', CAST(time AS TIMESTAMP)) = '__MONTH__'
+    AND locationInfos IS NOT NULL
+    AND locationInfos != '[]'
+    AND ('__PRODUCT__' = '' OR EXISTS (
+        SELECT 1
+        FROM UNNEST(json_extract(products, '$')::VARCHAR[]) AS t(product)
+        WHERE t.product = '__PRODUCT__'
+    ));

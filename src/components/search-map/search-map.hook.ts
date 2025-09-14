@@ -2,6 +2,7 @@
 
 import { useEffect, useMemo, useState } from "react";
 import sqlQuery from "./select_activities_by_year_month.sql";
+import selectProductsSql from "./select_products.sql";
 import type { Activity, LocationInfo } from "@/types";
 import { useDuckDBContext } from "@/contexts";
 
@@ -16,22 +17,41 @@ function decodeLatLngFromUrl(url: string): [number, number] | null {
 export function useSearchMap(year: number, month: number) {
   const [loading, setLoading] = useState(true);
   const [activities, setActivities] = useState<Activity[]>([]);
+  const [productOptions, setProductOptions] = useState<string[]>([]);
+  const [product, setProduct] = useState<string>("");
   const { runQuery } = useDuckDBContext();
 
   useEffect(() => {
     const fetchData = async () => {
       try {
         const sql = sqlQuery
-          .replace("?", `'${year}'`)
-          .replace("?", `'${String(month).padStart(2, "0")}'`);
+          .replace("__YEAR__", `${year}`)
+          .replace("__MONTH__", `${String(month).padStart(2, "0")}`)
+          .replace("__PRODUCT__", product)
+          .replace("__PRODUCT__", product);
         const data: unknown[] = await runQuery(sql);
+        console.log({ sql, data });
         setActivities(data as Activity[]);
       } finally {
         setLoading(false);
       }
     };
     void fetchData();
-  }, [year, month, runQuery]);
+  }, [year, month, product, runQuery]);
+
+  useEffect(() => {
+    const fetchProducts = async () => {
+      try {
+        const result = await runQuery(selectProductsSql);
+        const options = (result as { product: string }[]).map((r) => r.product);
+        setProductOptions(options);
+        if (options.length > 0) setProduct(options[0] ?? "");
+      } catch {
+        setProductOptions([]);
+      }
+    };
+    void fetchProducts();
+  }, [runQuery]);
 
   const points = useMemo(() => {
     const points: {
@@ -66,5 +86,5 @@ export function useSearchMap(year: number, month: number) {
     return points;
   }, [activities, year, month]);
 
-  return { points, loading } as const;
+  return { points, loading, productOptions, product, setProduct } as const;
 }

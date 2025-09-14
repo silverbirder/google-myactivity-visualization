@@ -4,8 +4,8 @@ import { MapContainer, TileLayer, Marker, Popup, useMap } from "react-leaflet";
 import L from "leaflet";
 import "leaflet/dist/leaflet.css";
 import type { LatLngTuple } from "leaflet";
-import { Box } from "@chakra-ui/react";
-import { useEffect, useMemo } from "react";
+import { Box, NativeSelect } from "@chakra-ui/react";
+import { useEffect, useMemo, type ChangeEvent } from "react";
 
 L.Icon.Default.mergeOptions({
   iconUrl: "/leaflet/marker-icon.png",
@@ -46,6 +46,9 @@ const MarkersBoundsUpdater = ({ markers }: { markers?: MarkerData[] }) => {
 
 const SearchMapComponent = ({
   points,
+  productOptions,
+  product,
+  setProduct,
 }: {
   points: {
     lat: number;
@@ -54,6 +57,9 @@ const SearchMapComponent = ({
     url?: string;
     product?: string;
   }[];
+  productOptions: string[];
+  product: string;
+  setProduct: (product: string) => void;
 }) => {
   const center: LatLngTuple =
     points[0]?.lat !== undefined && points[0]?.lng !== undefined
@@ -72,30 +78,54 @@ const SearchMapComponent = ({
   );
 
   return (
-    <Box h="400px" w="100%">
-      <MapContainer
-        center={center}
-        zoom={14}
-        style={{ height: "100%", width: "100%" }}
-      >
-        <TileLayer
-          attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-          url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-        />
-        <MarkersBoundsUpdater markers={markers} />
-        <MapCenterUpdater position={center} />
-        {points.map((p, i) => (
-          <Marker key={i} position={[p.lat, p.lng] as LatLngTuple}>
-            <Popup>
-              {p.name} {p.product && <>（{p.product}）</>}
-              <br />
-              <a href={p.url} target="_blank" rel="noopener noreferrer">
-                地図で見る
-              </a>
-            </Popup>
-          </Marker>
-        ))}
-      </MapContainer>
+    <Box>
+      <Box mb={2}>
+        <NativeSelect.Root
+          disabled={productOptions.length === 0}
+          size="sm"
+          width="fit-content"
+        >
+          <NativeSelect.Field
+            value={product}
+            onChange={(e: ChangeEvent<HTMLSelectElement>) =>
+              setProduct(e.target.value)
+            }
+          >
+            {productOptions.map((p) => (
+              <option key={p} value={p}>
+                {p}
+              </option>
+            ))}
+          </NativeSelect.Field>
+          <NativeSelect.Indicator />
+        </NativeSelect.Root>
+      </Box>
+
+      <Box h="400px" w="100%">
+        <MapContainer
+          center={center}
+          zoom={14}
+          style={{ height: "100%", width: "100%" }}
+        >
+          <TileLayer
+            attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+            url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+          />
+          <MarkersBoundsUpdater markers={markers} />
+          <MapCenterUpdater position={center} />
+          {points.map((p, i) => (
+            <Marker key={i} position={[p.lat, p.lng] as LatLngTuple}>
+              <Popup>
+                {p.name} {p.product && <>（{p.product}）</>}
+                <br />
+                <a href={p.url} target="_blank" rel="noopener noreferrer">
+                  地図で見る
+                </a>
+              </Popup>
+            </Marker>
+          ))}
+        </MapContainer>
+      </Box>
     </Box>
   );
 };

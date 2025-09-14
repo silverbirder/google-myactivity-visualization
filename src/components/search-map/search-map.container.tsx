@@ -14,8 +14,20 @@ type Props = {
 
 export const SearchMapContainer = ({ yearMonth }: Props) => {
   const { year, month } = yearMonth;
-  const { points, loading } = useSearchMap(year, month);
+  const { points, loading, productOptions, product, setProduct } = useSearchMap(
+    year,
+    month,
+  );
+
   if (loading) return <Spinner />;
   if (points.length === 0) return <NotFoundEmptyState />;
-  return <Map points={points} />;
+
+  return (
+    <Map
+      points={points}
+      productOptions={productOptions}
+      product={product}
+      setProduct={setProduct}
+    />
+  );
 };
