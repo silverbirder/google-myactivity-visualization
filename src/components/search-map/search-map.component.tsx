@@ -13,6 +13,7 @@ import "leaflet/dist/leaflet.css";
 import type { LatLngTuple } from "leaflet";
 import { Box, NativeSelect } from "@chakra-ui/react";
 import { useEffect, useMemo, useState, type ChangeEvent } from "react";
+import { NotFoundEmptyState } from "../not-found-empty-state";
 
 L.Icon.Default.mergeOptions({
   iconUrl: "/leaflet/marker-icon.png",
@@ -192,117 +193,119 @@ const SearchMapComponent = ({
 
   return (
     <Box>
-      <Box mb={2}>
-        <NativeSelect.Root
-          disabled={productOptions.length === 0}
-          size="sm"
-          width="fit-content"
-        >
-          <NativeSelect.Field
-            value={product}
-            onChange={(e: ChangeEvent<HTMLSelectElement>) =>
-              setProduct(e.target.value)
-            }
-          >
-            {productOptions.map((p) => (
-              <option key={p} value={p}>
-                {p}
-              </option>
-            ))}
-          </NativeSelect.Field>
-          <NativeSelect.Indicator />
-        </NativeSelect.Root>
-      </Box>
+      {productOptions.length > 0 && (
+        <Box mb={2}>
+          <NativeSelect.Root size="sm" width="fit-content">
+            <NativeSelect.Field
+              value={product}
+              onChange={(e: ChangeEvent<HTMLSelectElement>) =>
+                setProduct(e.target.value)
+              }
+            >
+              {productOptions.map((p) => (
+                <option key={p} value={p}>
+                  {p}
+                </option>
+              ))}
+            </NativeSelect.Field>
+            <NativeSelect.Indicator />
+          </NativeSelect.Root>
+        </Box>
+      )}
 
       <Box h="400px" w="100%">
-        <MapContainer
-          center={center}
-          zoom={zoom}
-          style={{ height: "100%", width: "100%" }}
-        >
-          <TileLayer
-            attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-            url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-          />
-          <ZoomHandler onZoomEnd={setZoom} />
-          <MarkersBoundsUpdater markers={markers} />
-          <MapCenterUpdater position={center} />
-          {clusters.map((cluster, i) => {
-            const firstMarker = cluster.markers[0];
-            return (
-              <Marker
-                key={i}
-                position={cluster.position}
-                icon={
-                  cluster.count === 1
-                    ? undefined
-                    : createClusterIcon(cluster.count)
-                }
-              >
-                <Popup maxWidth={300}>
-                  {cluster.count === 1 && firstMarker ? (
-                    <div>
-                      {firstMarker.title && (
-                        <>
-                          <strong>{firstMarker.title}</strong>
-                          <br />
-                        </>
-                      )}
-                      {firstMarker.name}
-                      <br />
-                      {firstMarker.url && (
-                        <a
-                          href={firstMarker.url}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                        >
-                          地図で見る
-                        </a>
-                      )}
-                    </div>
-                  ) : (
-                    <div style={{ maxHeight: "200px", overflowY: "auto" }}>
-                      <strong>{cluster.count}個の地点</strong>
-                      <br />
-                      <br />
-                      {cluster.markers.map((marker, idx) => (
-                        <div
-                          key={idx}
-                          style={{
-                            marginBottom: "8px",
-                            paddingBottom: "8px",
-                            borderBottom:
-                              idx < cluster.markers.length - 1
-                                ? "1px solid #eee"
-                                : "none",
-                          }}
-                        >
-                          {marker.title && (
-                            <>
-                              <strong>{marker.title}</strong>
-                              <br />
-                            </>
-                          )}
-                          {marker.name}
-                          <br />
-                          {marker.url && (
-                            <a
-                              href={marker.url}
-                              target="_blank"
-                              rel="noopener noreferrer"
-                            >
-                              地図で見る
-                            </a>
-                          )}
-                        </div>
-                      ))}
-                    </div>
-                  )}
-                </Popup>
-              </Marker>
-            );
-          })}
-        </MapContainer>
+        {points.length === 0 ? (
+          <NotFoundEmptyState />
+        ) : (
+          <MapContainer
+            center={center}
+            zoom={zoom}
+            style={{ height: "100%", width: "100%" }}
+          >
+            <TileLayer
+              attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+              url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+            />
+            <ZoomHandler onZoomEnd={setZoom} />
+            <MarkersBoundsUpdater markers={markers} />
+            <MapCenterUpdater position={center} />
+            {clusters.map((cluster, i) => {
+              const firstMarker = cluster.markers[0];
+              return (
+                <Marker
+                  key={i}
+                  position={cluster.position}
+                  icon={
+                    cluster.count === 1
+                      ? undefined
+                      : createClusterIcon(cluster.count)
+                  }
+                >
+                  <Popup maxWidth={300}>
+                    {cluster.count === 1 && firstMarker ? (
+                      <div>
+                        {firstMarker.title && (
+                          <>
+                            <strong>{firstMarker.title}</strong>
+                            <br />
+                          </>
+                        )}
+                        {firstMarker.name}
+                        <br />
+                        {firstMarker.url && (
+                          <a
+                            href={firstMarker.url}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                          >
+                            地図で見る
+                          </a>
+                        )}
+                      </div>
+                    ) : (
+                      <div style={{ maxHeight: "200px", overflowY: "auto" }}>
+                        <strong>{cluster.count}個の地点</strong>
+                        <br />
+                        <br />
+                        {cluster.markers.map((marker, idx) => (
+                          <div
+                            key={idx}
+                            style={{
+                              marginBottom: "8px",
+                              paddingBottom: "8px",
+                              borderBottom:
+                                idx < cluster.markers.length - 1
+                                  ? "1px solid #eee"
+                                  : "none",
+                            }}
+                          >
+                            {marker.title && (
+                              <>
+                                <strong>{marker.title}</strong>
+                                <br />
+                              </>
+                            )}
+                            {marker.name}
+                            <br />
+                            {marker.url && (
+                              <a
+                                href={marker.url}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                              >
+                                地図で見る
+                              </a>
+                            )}
+                          </div>
+                        ))}
+                      </div>
+                    )}
+                  </Popup>
+                </Marker>
+              );
+            })}
+          </MapContainer>
+        )}
       </Box>
     </Box>
   );
