@@ -10,6 +10,7 @@ export type Activity = {
   titleUrl: string;
   time: string;
   products: string[];
+  product?: string;
   activityControls: string[];
   locationInfos?: string | null;
 };

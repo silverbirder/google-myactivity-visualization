@@ -34,8 +34,13 @@ export function useSearchMap(year: number, month: number) {
   }, [year, month, runQuery]);
 
   const points = useMemo(() => {
-    const points: { lat: number; lng: number; name?: string; url?: string }[] =
-      [];
+    const points: {
+      lat: number;
+      lng: number;
+      name?: string;
+      url?: string;
+      product?: string;
+    }[] = [];
     activities.forEach((activity) => {
       const date = new Date(activity.time);
       if (date.getFullYear() === year && date.getMonth() + 1 === month) {
@@ -51,6 +56,7 @@ export function useSearchMap(year: number, month: number) {
                 lng: latlng[1],
                 name: info.name,
                 url: info.url,
+                product: activity.product,
               });
             }
           }

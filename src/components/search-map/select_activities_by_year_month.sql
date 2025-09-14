@@ -1,6 +1,7 @@
 SELECT
     time,
-    locationInfos
+    locationInfos,
+    UNNEST(json_extract(products, '$')::VARCHAR[]) AS product
 FROM
     activities
 WHERE

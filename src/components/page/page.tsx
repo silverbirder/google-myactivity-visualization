@@ -197,7 +197,7 @@ export const Page = () => {
                 <TimelineContainer yearMonth={selectedYearMonth} />
               </Stack>
               <Stack>
-                <Heading size="lg">検索地図</Heading>
+                <Heading size="lg">位置情報マップ</Heading>
                 <SearchMapContainer yearMonth={selectedYearMonth} />
               </Stack>
             </>
@@ -227,7 +227,7 @@ export const Page = () => {
                         <TimelineContainer yearMonth={yearMonth} />
                       </Stack>
                       <Stack>
-                        <Heading size="lg">検索地図</Heading>
+                        <Heading size="lg">位置情報マップ</Heading>
                         <SearchMapContainer yearMonth={yearMonth} />
                       </Stack>
                     </Flex>
