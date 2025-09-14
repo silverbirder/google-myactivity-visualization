@@ -16,12 +16,15 @@ export const useTimeline = (year: number, month: number) => {
   const { runQuery } = useDuckDBContext();
   const [loading, setLoading] = useState(true);
   const [data, setData] = useState<TimelineData>({});
+  const [selectedWeekday, setSelectedWeekday] = useState<number>(1);
 
   const fetchTimeline = useCallback(async () => {
     try {
-      const sql = selectTimelineByMonthSql
-        .replace("?", `'${year}'`)
-        .replace("?", `'${month.toString().padStart(2, "0")}'`);
+      let sql = selectTimelineByMonthSql
+        .replace("__YEAR__", `'${year}'`)
+        .replace("__MONTH__", `'${month.toString().padStart(2, "0")}'`);
+      const weekdayList = `'${selectedWeekday}'`;
+      sql = sql.replace("__WEEKDAYS__", weekdayList);
       const result = await runQuery(sql);
       const timeline: TimelineData = {};
       (
@@ -39,7 +42,7 @@ export const useTimeline = (year: number, month: number) => {
     } finally {
       setLoading(false);
     }
-  }, [runQuery, year, month]);
+  }, [runQuery, year, month, selectedWeekday]);
 
   useEffect(() => {
     void fetchTimeline();
@@ -48,5 +51,7 @@ export const useTimeline = (year: number, month: number) => {
   return {
     data,
     loading,
+    selectedWeekday,
+    setSelectedWeekday,
   } as const;
 };
