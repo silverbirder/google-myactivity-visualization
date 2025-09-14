@@ -185,15 +185,15 @@ export const Page = () => {
           {viewMode === "single" && selectedYearMonth && (
             <>
               <Stack>
-                <Heading size="lg">WordCloud</Heading>
+                <Heading size="lg">よく検索した言葉</Heading>
                 <WordCloudContainer yearMonth={selectedYearMonth} />
               </Stack>
               <Stack>
-                <Heading size="lg">ヒートマップ</Heading>
+                <Heading size="lg">利用回数カレンダー</Heading>
                 <HeatmapContainer yearMonth={selectedYearMonth} />
               </Stack>
               <Stack>
-                <Heading size="lg">タイムライン</Heading>
+                <Heading size="lg">1日の活動パターン</Heading>
                 <TimelineContainer yearMonth={selectedYearMonth} />
               </Stack>
               <Stack>
@@ -215,15 +215,15 @@ export const Page = () => {
                       flexShrink={0}
                     >
                       <Stack>
-                        <Heading size="lg">WordCloud</Heading>
+                        <Heading size="lg">よく検索した言葉</Heading>
                         <WordCloudContainer yearMonth={yearMonth} />
                       </Stack>
                       <Stack>
-                        <Heading size="lg">ヒートマップ</Heading>
+                        <Heading size="lg">利用回数カレンダー</Heading>
                         <HeatmapContainer yearMonth={yearMonth} />
                       </Stack>
                       <Stack>
-                        <Heading size="lg">タイムライン</Heading>
+                        <Heading size="lg">1日の活動パターン</Heading>
                         <TimelineContainer yearMonth={yearMonth} />
                       </Stack>
                       <Stack>
