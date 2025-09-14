@@ -10,6 +10,7 @@ WHERE
     AND strftime ('%m', CAST(time AS TIMESTAMP)) = '__MONTH__'
     AND locationInfos IS NOT NULL
     AND locationInfos != '[]'
+    AND locationInfos LIKE '%url%'
     AND ('__PRODUCT__' = '' OR EXISTS (
         SELECT 1
         FROM UNNEST(json_extract(products, '$')::VARCHAR[]) AS t(product)
