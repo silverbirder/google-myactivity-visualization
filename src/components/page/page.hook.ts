@@ -2,6 +2,7 @@ import { useDuckDBContext } from "@/contexts";
 import selectMonthsSql from "./select_months.sql";
 import { useCallback, useEffect, useState } from "react";
 import type { YearMonth } from "@/types";
+import { createListCollection } from "@chakra-ui/react";
 type ViewMode = "single" | "comparison";
 
 export const usePage = () => {
@@ -29,6 +30,8 @@ export const usePage = () => {
       const newYearMonths = res.map((row) => ({
         year: Number(row.year),
         month: Number(row.month),
+        has_word_cloud_data: Boolean(row.has_word_cloud_data),
+        has_location_data: Boolean(row.has_location_data),
       }));
       setYearMonths(newYearMonths);
 
@@ -98,6 +101,31 @@ export const usePage = () => {
     window.location.reload();
   }, []);
 
+  const createYearMonthCollection = useCallback((yearMonthList: YearMonth[]) => {
+    return createListCollection({
+      items: yearMonthList.map((yearMonth) => {
+        const features: string[] = [];
+        if (yearMonth.has_word_cloud_data) {
+          features.push("よく検索した言葉");
+        }
+        if (yearMonth.has_location_data) {
+          features.push("位置情報マップ");
+        }
+
+        const description =
+          features.length > 0
+            ? `利用可能: ${features.join(", ")}`
+            : "データなし";
+
+        return {
+          label: `${yearMonth.year}年${yearMonth.month}月`,
+          value: `${yearMonth.year}-${yearMonth.month}`,
+          description,
+        };
+      }),
+    });
+  }, []);
+
   return {
     isDuckDBLoading,
     isYearMonthsLoading,
@@ -114,5 +142,6 @@ export const usePage = () => {
     yearProductStatsRefreshTrigger,
     handleUploadComplete,
     handleDeleteComplete,
+    createYearMonthCollection,
   } as const;
 };
