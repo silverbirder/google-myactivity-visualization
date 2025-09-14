@@ -24,6 +24,7 @@ import {
   ScrollArea,
   Skeleton,
 } from "@chakra-ui/react";
+import { ToggleTip } from "@/components/ui";
 import {
   LuChartColumn,
   LuDatabase,
@@ -31,6 +32,7 @@ import {
   LuTrash2,
   LuEye,
   LuArrowLeftRight,
+  LuInfo,
 } from "react-icons/lu";
 
 export const Page = () => {
@@ -136,19 +138,47 @@ export const Page = () => {
           {viewMode === "single" && selectedYearMonth && (
             <>
               <Stack>
-                <Heading size="lg">よく検索した言葉</Heading>
+                <HStack>
+                  <Heading size="lg">よく検索した言葉</Heading>
+                  <ToggleTip content="Google検索から、検索クエリ（qパラメータ）を抽出しワードクラウドで可視化します。">
+                    <Button size="xs" variant="ghost">
+                      <LuInfo />
+                    </Button>
+                  </ToggleTip>
+                </HStack>
                 <WordCloudContainer yearMonth={selectedYearMonth} />
               </Stack>
               <Stack>
-                <Heading size="lg">利用回数カレンダー</Heading>
+                <HStack>
+                  <Heading size="lg">利用回数カレンダー</Heading>
+                  <ToggleTip content="選択した製品の1日ごとの利用回数を集計しカレンダー表示します。">
+                    <Button size="xs" variant="ghost">
+                      <LuInfo />
+                    </Button>
+                  </ToggleTip>
+                </HStack>
                 <HeatmapContainer yearMonth={selectedYearMonth} />
               </Stack>
               <Stack>
-                <Heading size="lg">1日の活動パターン</Heading>
+                <HStack>
+                  <Heading size="lg">1日の活動パターン</Heading>
+                  <ToggleTip content="時間帯ごと・製品ごとの利用回数を集計し、1日の活動パターンを可視化します。">
+                    <Button size="xs" variant="ghost">
+                      <LuInfo />
+                    </Button>
+                  </ToggleTip>
+                </HStack>
                 <TimelineContainer yearMonth={selectedYearMonth} />
               </Stack>
               <Stack>
-                <Heading size="lg">位置情報マップ</Heading>
+                <HStack>
+                  <Heading size="lg">位置情報マップ</Heading>
+                  <ToggleTip content="locationInfosが存在するアクティビティのみ抽出し、地図上に位置情報を表示します。">
+                    <Button size="xs" variant="ghost">
+                      <LuInfo />
+                    </Button>
+                  </ToggleTip>
+                </HStack>
                 <SearchMapContainer yearMonth={selectedYearMonth} />
               </Stack>
             </>
@@ -166,19 +196,47 @@ export const Page = () => {
                       flexShrink={0}
                     >
                       <Stack>
-                        <Heading size="lg">よく検索した言葉</Heading>
+                        <HStack>
+                          <Heading size="lg">よく検索した言葉</Heading>
+                          <ToggleTip content="Google検索から、検索クエリ（qパラメータ）を抽出しワードクラウドで可視化します。">
+                            <Button size="xs" variant="ghost">
+                              <LuInfo />
+                            </Button>
+                          </ToggleTip>
+                        </HStack>
                         <WordCloudContainer yearMonth={yearMonth} />
                       </Stack>
                       <Stack>
-                        <Heading size="lg">利用回数カレンダー</Heading>
+                        <HStack>
+                          <Heading size="lg">利用回数カレンダー</Heading>
+                          <ToggleTip content="選択した製品の1日ごとの利用回数を集計しカレンダー表示します。">
+                            <Button size="xs" variant="ghost">
+                              <LuInfo />
+                            </Button>
+                          </ToggleTip>
+                        </HStack>
                         <HeatmapContainer yearMonth={yearMonth} />
                       </Stack>
                       <Stack>
-                        <Heading size="lg">1日の活動パターン</Heading>
+                        <HStack>
+                          <Heading size="lg">1日の活動パターン</Heading>
+                          <ToggleTip content="時間帯ごと・製品ごとの利用回数を集計し、1日の活動パターンを可視化します。">
+                            <Button size="xs" variant="ghost">
+                              <LuInfo />
+                            </Button>
+                          </ToggleTip>
+                        </HStack>
                         <TimelineContainer yearMonth={yearMonth} />
                       </Stack>
                       <Stack>
-                        <Heading size="lg">位置情報マップ</Heading>
+                        <HStack>
+                          <Heading size="lg">位置情報マップ</Heading>
+                          <ToggleTip content="locationInfosが存在するアクティビティのみ抽出し、地図上に位置情報を表示します。">
+                            <Button size="xs" variant="ghost">
+                              <LuInfo />
+                            </Button>
+                          </ToggleTip>
+                        </HStack>
                         <SearchMapContainer yearMonth={yearMonth} />
                       </Stack>
                     </Flex>
