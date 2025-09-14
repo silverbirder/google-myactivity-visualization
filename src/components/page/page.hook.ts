@@ -26,18 +26,25 @@ export const usePage = () => {
     try {
       const sql = selectMonthsSql;
       const res = await runQuery(sql);
-      setYearMonths(
-        res.map((row) => ({
-          year: Number(row.year),
-          month: Number(row.month),
-        })),
-      );
+      const newYearMonths = res.map((row) => ({
+        year: Number(row.year),
+        month: Number(row.month),
+      }));
+      setYearMonths(newYearMonths);
+
+      if (newYearMonths.length > 0 && !selectedYearMonth) {
+        const firstYearMonth = newYearMonths[0];
+        if (firstYearMonth) {
+          setSelectedYearMonth(firstYearMonth);
+          setComparisonYearMonths([firstYearMonth]);
+        }
+      }
     } catch (err) {
       setError(err instanceof Error ? err.message : String(err));
     } finally {
       setIsYearMonthsLoading(false);
     }
-  }, [isDuckDBLoading, runQuery]);
+  }, [isDuckDBLoading, runQuery, selectedYearMonth]);
 
   useEffect(() => {
     void fetchMonths();

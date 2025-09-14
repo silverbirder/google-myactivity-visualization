@@ -76,7 +76,7 @@ export const Page = () => {
             />
           </Stack>
           {!isYearMonthsLoading && yearMonths.length > 0 && (
-            <HStack justifyContent="space-between">
+            <HStack justifyContent="space-between" alignItems="flex-start">
               <Stack gap="4">
                 {viewMode === "single" && (
                   <NativeSelect.Root width="fit-content">
@@ -85,10 +85,14 @@ export const Page = () => {
                       placeholder="年月を選択してください。"
                       onChange={(e: ChangeEvent<HTMLSelectElement>) => {
                         const [year, month] = e.target.value.split("-");
-                        handleSelectedYearMonth({
-                          year: Number(year),
-                          month: Number(month),
-                        });
+                        const numYear = Number(year);
+                        const numMonth = Number(month);
+                        if (!isNaN(numYear) && !isNaN(numMonth)) {
+                          handleSelectedYearMonth({
+                            year: Number(year),
+                            month: Number(month),
+                          });
+                        }
                       }}
                     >
                       {yearMonths.map((yearMonth) => (
