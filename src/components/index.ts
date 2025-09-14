@@ -9,4 +9,5 @@ export * from "./search-map";
 export * from "./search-word-cloud";
 export * from "./timeline";
 export * from "./ui";
+export * from "./year-month-selector";
 export * from "./year-product-stats";

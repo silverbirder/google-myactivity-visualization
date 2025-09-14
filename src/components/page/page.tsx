@@ -10,6 +10,7 @@ import {
   YearProductStatsContainer,
   AppDescriptionComponent,
   ActivityDeleterContainer,
+  YearMonthSelectorContainer,
 } from "@/components";
 import { usePage } from "./page.hook";
 import {
@@ -20,12 +21,8 @@ import {
   Stack,
   Button,
   Flex,
-  Badge,
   ScrollArea,
   Skeleton,
-  Portal,
-  Select,
-  Span,
 } from "@chakra-ui/react";
 import {
   LuChartColumn,
@@ -33,7 +30,6 @@ import {
   LuUpload,
   LuTrash2,
   LuEye,
-  LuX,
   LuArrowLeftRight,
 } from "react-icons/lu";
 
@@ -52,7 +48,6 @@ export const Page = () => {
     yearProductStatsRefreshTrigger,
     handleUploadComplete,
     handleDeleteComplete,
-    createYearMonthCollection,
   } = usePage();
 
   if (isDuckDBLoading) {
@@ -108,153 +103,15 @@ export const Page = () => {
           {!isYearMonthsLoading && yearMonths.length > 0 && (
             <HStack justifyContent="space-between" alignItems="flex-start">
               <Stack gap="4">
-                {viewMode === "single" && (
-                  <Select.Root
-                    collection={createYearMonthCollection(yearMonths)}
-                    size="sm"
-                    width="320px"
-                    value={
-                      selectedYearMonth
-                        ? [
-                            `${selectedYearMonth.year}-${selectedYearMonth.month}`,
-                          ]
-                        : []
-                    }
-                    onValueChange={(details) => {
-                      const value = details.value[0];
-                      if (value) {
-                        const [year, month] = value.split("-");
-                        const numYear = Number(year);
-                        const numMonth = Number(month);
-                        if (!isNaN(numYear) && !isNaN(numMonth)) {
-                          handleSelectedYearMonth({
-                            year: numYear,
-                            month: numMonth,
-                          });
-                        }
-                      }
-                    }}
-                  >
-                    <Select.HiddenSelect />
-                    <Select.Label>年月を選択</Select.Label>
-                    <Select.Control>
-                      <Select.Trigger>
-                        <Select.ValueText placeholder="年月を選択してください" />
-                      </Select.Trigger>
-                      <Select.IndicatorGroup>
-                        <Select.Indicator />
-                      </Select.IndicatorGroup>
-                    </Select.Control>
-                    <Portal>
-                      <Select.Positioner>
-                        <Select.Content>
-                          {createYearMonthCollection(yearMonths).items.map(
-                            (item) => (
-                              <Select.Item item={item} key={item.value}>
-                                <Stack gap="0">
-                                  <Select.ItemText>
-                                    {item.label}
-                                  </Select.ItemText>
-                                  <Span color="fg.muted" textStyle="xs">
-                                    {item.description}
-                                  </Span>
-                                </Stack>
-                                <Select.ItemIndicator />
-                              </Select.Item>
-                            ),
-                          )}
-                        </Select.Content>
-                      </Select.Positioner>
-                    </Portal>
-                  </Select.Root>
-                )}
-                {viewMode === "comparison" && (
-                  <Stack gap="2">
-                    <Select.Root
-                      collection={createYearMonthCollection(
-                        yearMonths.filter(
-                          (yearMonth) =>
-                            !comparisonYearMonths.some(
-                              (ym) =>
-                                ym.year === yearMonth.year &&
-                                ym.month === yearMonth.month,
-                            ),
-                        ),
-                      )}
-                      size="sm"
-                      width="320px"
-                      onValueChange={(details) => {
-                        const value = details.value[0];
-                        if (value) {
-                          const [year, month] = value.split("-");
-                          handleAddComparisonYearMonth({
-                            year: Number(year),
-                            month: Number(month),
-                          });
-                        }
-                      }}
-                    >
-                      <Select.HiddenSelect />
-                      <Select.Label>年月を追加</Select.Label>
-                      <Select.Control>
-                        <Select.Trigger>
-                          <Select.ValueText placeholder="年月を追加してください" />
-                        </Select.Trigger>
-                        <Select.IndicatorGroup>
-                          <Select.Indicator />
-                        </Select.IndicatorGroup>
-                      </Select.Control>
-                      <Portal>
-                        <Select.Positioner>
-                          <Select.Content>
-                            {createYearMonthCollection(
-                              yearMonths.filter(
-                                (yearMonth) =>
-                                  !comparisonYearMonths.some(
-                                    (ym) =>
-                                      ym.year === yearMonth.year &&
-                                      ym.month === yearMonth.month,
-                                  ),
-                              ),
-                            ).items.map((item) => (
-                              <Select.Item item={item} key={item.value}>
-                                <Stack gap="0">
-                                  <Select.ItemText>
-                                    {item.label}
-                                  </Select.ItemText>
-                                  <Span color="fg.muted" textStyle="xs">
-                                    {item.description}
-                                  </Span>
-                                </Stack>
-                                <Select.ItemIndicator />
-                              </Select.Item>
-                            ))}
-                          </Select.Content>
-                        </Select.Positioner>
-                      </Portal>
-                    </Select.Root>
-                    {comparisonYearMonths.length > 0 && (
-                      <Flex gap="2" wrap="wrap">
-                        {comparisonYearMonths.map((yearMonth) => (
-                          <Badge
-                            key={`${yearMonth.year}-${yearMonth.month}`}
-                            variant="solid"
-                            colorPalette="green"
-                            py="1"
-                            px="2"
-                            cursor="pointer"
-                            onClick={() =>
-                              handleRemoveComparisonYearMonth(yearMonth)
-                            }
-                          >
-                            {yearMonth.year}年{yearMonth.month}月
-                            <LuX size="0.8rem" style={{ marginLeft: "4px" }} />
-                          </Badge>
-                        ))}
-                      </Flex>
-                    )}
-                  </Stack>
-                )}
+                <YearMonthSelectorContainer
+                  yearMonths={yearMonths}
+                  viewMode={viewMode}
+                  selectedYearMonth={selectedYearMonth}
+                  comparisonYearMonths={comparisonYearMonths}
+                  onSelectedYearMonthChange={handleSelectedYearMonth}
+                  onAddComparisonYearMonth={handleAddComparisonYearMonth}
+                  onRemoveComparisonYearMonth={handleRemoveComparisonYearMonth}
+                />
               </Stack>
               <HStack gap="2">
                 <Button
