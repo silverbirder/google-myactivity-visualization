@@ -61,8 +61,11 @@ export const AppDescriptionComponent = () => {
               <List.Indicator asChild>
                 <LuShield />
               </List.Indicator>
-              <Text fontSize="sm">
-                すべてのデータはブラウザ内でのみ処理され、外部サーバーには一切送信されません。
+              <Text fontSize="sm" fontWeight="bold">
+                すべてのデータはブラウザ内でのみ処理され、
+                <Text as="span" color="red.600" fontWeight="bold">
+                  外部サーバーには一切送信されません。
+                </Text>
               </Text>
             </List.Item>
           </List.Root>
