@@ -57,7 +57,11 @@ export const YearProductStatsComponent = ({ tableData }: Props) => {
       <Table.Root size="sm" variant="outline">
         <Table.Header>
           <Table.Row>
-            <Table.ColumnHeader width="60px"></Table.ColumnHeader>
+            <Table.ColumnHeader width="60px">
+              <Text fontSize="sm" fontWeight="bold">
+                年\製品
+              </Text>
+            </Table.ColumnHeader>
             {tableData.products.map((product) => (
               <Table.ColumnHeader key={product}>
                 <Text fontSize="sm" fontWeight="bold" truncate title={product}>

@@ -280,6 +280,11 @@ export const Page = () => {
             <HStack gap="2">
               <LuChartColumn size="1.5rem" color="green" />
               <Heading size="lg">年別製品統計</Heading>
+              <ToggleTip content="年ごとに製品別の利用回数を集計し、表とチャートで表示します。">
+                <Button size="xs" variant="ghost">
+                  <LuInfo />
+                </Button>
+              </ToggleTip>
             </HStack>
             <YearProductStatsContainer
               refetchTrigger={yearProductStatsRefreshTrigger}
