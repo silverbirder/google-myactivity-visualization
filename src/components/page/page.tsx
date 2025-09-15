@@ -123,10 +123,17 @@ export const Page = () => {
           )}
           {!isYearMonthsLoading && yearMonths.length > 0 && (
             <Flex
+              position="sticky"
+              top="0"
+              zIndex="sticky"
+              bg="bg"
+              p="2"
               justifyContent="space-between"
               alignItems="flex-start"
               wrap="wrap"
               gap="2"
+              borderBottom="1px solid"
+              borderColor="border"
             >
               <Stack gap="4">
                 <YearMonthSelectorContainer
