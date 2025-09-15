@@ -153,7 +153,7 @@ export const Page = () => {
                   onClick={() => handleViewModeChange("single")}
                 >
                   <LuEye size="1rem" />
-                  シングル表示
+                  単一表示
                 </Button>
                 <Button
                   variant={viewMode === "comparison" ? "solid" : "outline"}
