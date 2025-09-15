@@ -33,8 +33,8 @@ export const useYearMonthSelector = ({
 
           const description =
             features.length > 0
-              ? `利用可能: ${features.join(", ")}`
-              : "データなし";
+              ? `データあり: ${features.join(", ")}`
+              : undefined;
 
           return {
             label: `${yearMonth.year}年${yearMonth.month}月`,
