@@ -11,6 +11,7 @@ import {
   AppDescriptionComponent,
   ActivityDeleterContainer,
   YearMonthSelectorContainer,
+  Footer,
 } from "@/components";
 import { usePage } from "./page.hook";
 import {
@@ -24,16 +25,16 @@ import {
   ScrollArea,
   Skeleton,
 } from "@chakra-ui/react";
-import { ToggleTip } from "@/components/ui";
 import {
   LuChartColumn,
-  LuDatabase,
   LuUpload,
-  LuTrash2,
   LuEye,
   LuArrowLeftRight,
   LuInfo,
+  LuDatabase,
+  LuTrash2,
 } from "react-icons/lu";
+import { ToggleTip } from "@/components/ui";
 
 export const Page = () => {
   const {
@@ -304,6 +305,7 @@ export const Page = () => {
           )}
         </Stack>
       </Center>
+      <Footer />
     </Container>
   );
 };

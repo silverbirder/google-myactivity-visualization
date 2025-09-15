@@ -2,6 +2,7 @@ export * from "./activity-uploader";
 export * from "./activity-viewer";
 export * from "./activity-deleter";
 export * from "./app-description";
+export * from "./footer";
 export * from "./heatmap";
 export * from "./not-found-empty-state";
 export * from "./page";
