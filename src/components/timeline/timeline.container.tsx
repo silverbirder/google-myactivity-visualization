@@ -17,7 +17,8 @@ export const TimelineContainer = ({ yearMonth }: Props) => {
   );
 
   if (loading) return <Skeleton height="50vh" width="100%" />;
-  if (Object.keys(data).length === 0) return <NotFoundEmptyState />;
+  if (Object.keys(data).length === 0)
+    return <NotFoundEmptyState height="50vh" width="100%" />;
 
   return (
     <TimelineComponent

@@ -215,7 +215,7 @@ const SearchMapComponent = ({
 
       <Box h="400px" w="100%">
         {points.length === 0 ? (
-          <NotFoundEmptyState />
+          <NotFoundEmptyState style={{ height: "100%", width: "100%" }} />
         ) : (
           <MapContainer
             center={center}

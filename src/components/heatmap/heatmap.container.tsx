@@ -27,7 +27,8 @@ export const HeatmapContainer = ({ yearMonth }: Props) => {
   });
 
   if (loading) return <Skeleton height="288px" width="100%" />;
-  if (calendarCells.length === 0) return <NotFoundEmptyState />;
+  if (calendarCells.length === 0)
+    return <NotFoundEmptyState height="288px" width="100%" />;
 
   return (
     <HeatmapComponent

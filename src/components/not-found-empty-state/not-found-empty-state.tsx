@@ -7,16 +7,17 @@ type Props = {
   description?: string;
   iconSize?: number;
   children?: ReactNode;
-};
+} & React.ComponentProps<typeof EmptyState.Root>;
 
 export const NotFoundEmptyState = ({
   title = "結果が見つかりませんでした",
   description = "条件を変えて再度お試しください",
   iconSize = 32,
   children,
+  ...props
 }: Props) => {
   return (
-    <EmptyState.Root>
+    <EmptyState.Root {...props}>
       <EmptyState.Content>
         <EmptyState.Indicator>
           <LuSearch size={iconSize} />

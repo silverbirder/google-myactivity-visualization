@@ -14,7 +14,8 @@ export const WordCloudContainer = ({ yearMonth }: Props) => {
   const { words, loading } = useWordCloud({ yearMonth });
 
   if (loading) return <Skeleton height="200px" width="100%" />;
-  if (words.length === 0) return <NotFoundEmptyState />;
+  if (words.length === 0)
+    return <NotFoundEmptyState height="200px" width="100%" />;
 
   return <WordCloudComponent words={words} width={600} height={400} />;
 };

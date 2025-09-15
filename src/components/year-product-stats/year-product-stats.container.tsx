@@ -25,6 +25,8 @@ export const YearProductStatsContainer = ({ refetchTrigger }: Props) => {
       <NotFoundEmptyState
         title="データが見つかりません"
         description="年ごとの製品統計が見つかりませんでした。"
+        height="400px"
+        width="100%"
       />
     );
 
