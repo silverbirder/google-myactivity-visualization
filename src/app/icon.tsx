@@ -25,7 +25,7 @@ export default function Icon({ id }: { id: number }) {
           fontSize: id,
         }}
       >
-        👀
+        📊
       </div>
     ),
     {

@@ -17,7 +17,7 @@ export default function Icon() {
           height: "100%",
         }}
       >
-        👀
+        📊
       </div>
     ),
     {
