@@ -22,7 +22,20 @@ export const AppDescriptionComponent = () => {
                 <LuInfo />
               </List.Indicator>
               <Text fontSize="sm">
-                Googleマイアクティビティデータを可視化し、活動パターンを分析できるWebアプリケーションです。
+                <Link
+                  href="https://myactivity.google.com/myactivity"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  fontWeight="bold"
+                  color="blue.600"
+                  textDecoration="underline"
+                  _hover={{ color: "blue.800" }}
+                  marginRight="1"
+                >
+                  Googleマイアクティビティ
+                  <LuExternalLink size="0.8rem" />
+                </Link>
+                データを可視化し、活動パターンを分析できるWebアプリケーションです。
               </Text>
             </List.Item>
             <List.Item>
@@ -31,7 +44,7 @@ export const AppDescriptionComponent = () => {
               </List.Indicator>
               <Text fontSize="sm">
                 <Link
-                  href="https://takeout.google.com/"
+                  href="https://takeout.google.com"
                   target="_blank"
                   rel="noopener noreferrer"
                   fontWeight="bold"
