@@ -46,7 +46,7 @@ export const ActivityUploaderComponent = ({
         <Text fontSize="sm" color="fg.muted" mb={3}>
           可視化がどんな感じになるか試してみたい方は、サンプルデータをダウンロードしてアップロードしてみてください。
         </Text>
-        <Button size="sm" variant="outline" onClick={handleSampleDownload}>
+        <Button size="sm" colorPalette="green" onClick={handleSampleDownload}>
           <LuDownload />
           サンプルデータをダウンロード
         </Button>
