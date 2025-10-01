@@ -231,15 +231,15 @@ const SearchMapComponent = ({
             <MapCenterUpdater position={center} />
             {clusters.map((cluster, i) => {
               const firstMarker = cluster.markers[0];
+              const markerIcon =
+                cluster.count === 1
+                  ? undefined
+                  : createClusterIcon(cluster.count);
               return (
                 <Marker
                   key={i}
                   position={cluster.position}
-                  icon={
-                    cluster.count === 1
-                      ? undefined
-                      : createClusterIcon(cluster.count)
-                  }
+                  {...(markerIcon ? { icon: markerIcon } : {})}
                 >
                   <Popup maxWidth={300}>
                     {cluster.count === 1 && firstMarker ? (
