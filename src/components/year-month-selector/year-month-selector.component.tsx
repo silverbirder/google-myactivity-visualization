@@ -92,7 +92,7 @@ export const YearMonthSelector = (props: Props) => {
         </Select.Control>
         <Portal>
           <Select.Positioner>
-            <Select.Content>
+            <Select.Content zIndex="sticky">
               {comparisonModeCollection.items.map((item) => (
                 <Select.Item item={item} key={item.value}>
                   <Stack gap="0">
