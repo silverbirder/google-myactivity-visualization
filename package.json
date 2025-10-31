@@ -22,7 +22,7 @@
     "build-storybook": "storybook build"
   },
   "dependencies": {
-    "@chakra-ui/charts": "^3.26.0",
+    "@chakra-ui/charts": "^3.28.0",
     "@chakra-ui/react": "^3.26.0",
     "@duckdb/duckdb-wasm": "^1.29.1-dev132.0",
     "@emotion/react": "^11.14.0",

@@ -12,6 +12,7 @@ import {
   ActivityDeleterContainer,
   YearMonthSelectorContainer,
   Footer,
+  ChromeDomainBarListContainer,
 } from "@/components";
 import { usePage } from "./page.hook";
 import {
@@ -181,6 +182,17 @@ export const Page = () => {
               </Stack>
               <Stack>
                 <HStack>
+                  <Heading size="lg">よくアクセスするサイト</Heading>
+                  <ToggleTip content="Chromeからよくアクセスするドメインを集計し、棒グラフで表示します。">
+                    <Button size="xs" variant="ghost">
+                      <LuInfo />
+                    </Button>
+                  </ToggleTip>
+                </HStack>
+                <ChromeDomainBarListContainer yearMonth={selectedYearMonth} />
+              </Stack>
+              <Stack>
+                <HStack>
                   <Heading size="lg">利用回数カレンダー</Heading>
                   <ToggleTip content="選択した製品の1日ごとの利用回数を集計しカレンダー表示します。">
                     <Button size="xs" variant="ghost">
@@ -243,6 +255,17 @@ export const Page = () => {
                           </ToggleTip>
                         </HStack>
                         <WordCloudContainer yearMonth={yearMonth} />
+                      </Stack>
+                      <Stack>
+                        <HStack>
+                          <Heading size="lg">よくアクセスするサイト</Heading>
+                          <ToggleTip content="Chromeからよくアクセスするドメインを集計し、棒グラフで表示します。">
+                            <Button size="xs" variant="ghost">
+                              <LuInfo />
+                            </Button>
+                          </ToggleTip>
+                        </HStack>
+                        <ChromeDomainBarListContainer yearMonth={yearMonth} />
                       </Stack>
                       <Stack>
                         <HStack>
